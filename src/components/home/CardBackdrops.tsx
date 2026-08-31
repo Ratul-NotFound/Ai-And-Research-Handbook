@@ -164,3 +164,57 @@ export function MathematicsCardBackdrop() {
     </div>
   );
 }
+
+/**
+ * 4. DEEP LEARNING - INTEGRATED TOPIC BACKGROUND
+ * Deep neural network layers, self-attention query-key vectors, and multi-head tensor connections
+ */
+export function DeepLearningCardBackdrop() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-2xl">
+      {/* Ambient gradient aura */}
+      <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-violet-400/10 dark:bg-purple-500/15 blur-3xl" />
+
+      {/* Hexagonal tensor grid pattern */}
+      <svg className="absolute inset-0 w-full h-full opacity-[0.035] dark:opacity-[0.03]" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="bg-grid-dl" width="18" height="18" patternUnits="userSpaceOnUse">
+            <path d="M 9 0 L 18 9 L 9 18 L 0 9 Z" fill="none" stroke="currentColor" strokeWidth="0.75" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#bg-grid-dl)" />
+      </svg>
+
+      {/* Self-Attention & Deep Network Topology Watermark */}
+      <svg
+        className="absolute -right-6 -bottom-6 w-56 h-56 opacity-10 dark:opacity-15 text-violet-600 dark:text-purple-400 transition-all duration-700 group-hover:scale-105 group-hover:opacity-20"
+        viewBox="0 0 200 200"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {/* Multi-head attention connectivity lines */}
+        <path d="M 30 50 Q 100 20 170 60" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" />
+        <path d="M 30 100 Q 100 80 170 60" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M 30 150 Q 100 140 170 140" stroke="currentColor" strokeWidth="1.5" strokeDasharray="4 4" />
+        <path d="M 30 50 L 100 100" stroke="currentColor" strokeWidth="1.25" />
+        <path d="M 30 150 L 100 100" stroke="currentColor" strokeWidth="1.25" />
+        <path d="M 100 100 L 170 60" stroke="currentColor" strokeWidth="1.75" />
+        <path d="M 100 100 L 170 140" stroke="currentColor" strokeWidth="1.75" />
+
+        {/* Transformer Layer Nodes */}
+        <circle cx="30" cy="50" r="6" stroke="currentColor" strokeWidth="1.5" fill="currentColor" fillOpacity="0.1" />
+        <circle cx="30" cy="100" r="6" stroke="currentColor" strokeWidth="1.5" fill="currentColor" fillOpacity="0.1" />
+        <circle cx="30" cy="150" r="6" stroke="currentColor" strokeWidth="1.5" fill="currentColor" fillOpacity="0.1" />
+
+        <circle cx="100" cy="100" r="10" stroke="currentColor" strokeWidth="2" fill="currentColor" fillOpacity="0.2" />
+        <circle cx="100" cy="100" r="4" fill="currentColor" />
+
+        <circle cx="170" cy="60" r="9" stroke="currentColor" strokeWidth="1.75" fill="currentColor" fillOpacity="0.15" />
+        <circle cx="170" cy="60" r="3.5" fill="currentColor" />
+
+        <circle cx="170" cy="140" r="9" stroke="currentColor" strokeWidth="1.75" fill="currentColor" fillOpacity="0.15" />
+        <circle cx="170" cy="140" r="3.5" fill="currentColor" />
+      </svg>
+    </div>
+  );
+}

@@ -50,8 +50,10 @@ export interface KeyQuestionAnswer {
 }
 
 export interface RealWorldUse {
-  industry: string;
+  industry?: string;
+  domain?: string;
   application: string;
+  description?: string;
 }
 
 export interface CalloutBlock {

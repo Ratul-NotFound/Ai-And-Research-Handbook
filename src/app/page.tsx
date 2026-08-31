@@ -9,7 +9,8 @@ import CommandPalette from '@/components/search/CommandPalette';
 import { 
   CsResearchCardBackdrop, 
   MachineLearningCardBackdrop, 
-  MathematicsCardBackdrop 
+  MathematicsCardBackdrop,
+  DeepLearningCardBackdrop
 } from '@/components/home/CardBackdrops';
 import { 
   BookOpen, 
@@ -17,11 +18,11 @@ import {
   Search, 
   GraduationCap,
   Boxes,
+  Cpu,
   Sigma,
   Sparkles,
   ChevronRight,
   CheckCircle2,
-  ArrowUpRight
 } from 'lucide-react';
 
 interface MasterPath {
@@ -46,7 +47,7 @@ export default function HomePage() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
-  // 3 Primary Curriculum Portals (Unified, Clean, Modern Architecture)
+  // 4 Flagship Curriculum Portals (Unified, Clean, Modern Architecture)
   const masterPaths: MasterPath[] = [
     {
       id: 'cs-research',
@@ -90,6 +91,28 @@ export default function HomePage() {
         'Data Preprocessing, Outliers, RobustScaler & Leak-Free Splits',
         'Linear/Logistic Regression & House Pricing Worked Calculation',
         'Random Forest & Gradient Boosting (XGBoost, LightGBM, CatBoost)',
+      ]
+    },
+    {
+      id: 'deep-learning',
+      title: 'Deep Learning (From Neurons to Transformers)',
+      badge: '15 In-Depth Chapters',
+      topicCount: 1,
+      chapterCount: 15,
+      description: 'From artificial neurons, activation functions, and backpropagation to CNNs, ResNet, LSTMs, Self-Attention, Transformers (BERT/GPT), Diffusion Generative models, and TensorRT deployment.',
+      icon: <Cpu className="h-6 w-6 text-violet-600 dark:text-violet-400" />,
+      iconBg: 'bg-violet-50 dark:bg-violet-950/80 border-violet-200/80 dark:border-violet-800 text-violet-600 dark:text-violet-400',
+      cardGradient: 'from-violet-500/[0.05] via-violet-500/[0.01] to-transparent dark:from-violet-500/[0.08] dark:via-transparent dark:to-transparent',
+      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-violet-400 dark:hover:border-violet-500/80 hover:shadow-xl hover:shadow-violet-500/[0.06]',
+      badgeClass: 'bg-violet-50 dark:bg-violet-950/80 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-800',
+      primaryButton: 'bg-violet-600 hover:bg-violet-700 text-white shadow-xs hover:shadow-md hover:shadow-violet-500/20',
+      pathUrl: '/topic/deep-learning',
+      startChapterUrl: '/book/the-perceptron-artificial-neuron',
+      highlights: [
+        'The Perceptron, Activation Zoo & Multi-Layer Forward Pass',
+        'Backpropagation Chain Rule & Adam/AdamW Optimizers',
+        'CNNs, ResNet Skip Connections & YOLO/UNet Architectures',
+        'Self-Attention, Transformers (BERT/GPT) & Diffusion SOTA',
       ]
     },
     {
@@ -167,7 +190,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 3 PRIMARY CURRICULUM PATHS (Separated Domain Portals) */}
+        {/* 4 PRIMARY CURRICULUM PATHS (Separated Domain Portals) */}
         <section suppressHydrationWarning className="space-y-6">
           <div suppressHydrationWarning className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
             <div suppressHydrationWarning>
@@ -179,11 +202,11 @@ export default function HomePage() {
               </h2>
             </div>
             <span className="text-xs font-mono text-slate-400">
-              10 Topics • 44 Chapters
+              11 Topics • 59 Chapters
             </span>
           </div>
 
-          <div suppressHydrationWarning className="grid grid-cols-1 lg:grid-cols-3 gap-5 sm:gap-6">
+          <div suppressHydrationWarning className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 sm:gap-6">
             {masterPaths.map((path) => (
               <div
                 key={path.id}
@@ -193,6 +216,7 @@ export default function HomePage() {
                 {/* Topic-Relevant Subtle Integrated Background */}
                 {path.id === 'cs-research' && <CsResearchCardBackdrop />}
                 {path.id === 'classical-ml' && <MachineLearningCardBackdrop />}
+                {path.id === 'deep-learning' && <DeepLearningCardBackdrop />}
                 {path.id === 'mathematics' && <MathematicsCardBackdrop />}
 
                 <div className="relative z-10 space-y-4">
@@ -214,7 +238,7 @@ export default function HomePage() {
 
                   {/* Title & Description */}
                   <div className="space-y-1.5 pt-1">
-                    <h3 className="text-lg sm:text-xl font-black text-slate-950 dark:text-white tracking-tight leading-snug">
+                    <h3 className="text-lg font-black text-slate-950 dark:text-white tracking-tight leading-snug">
                       {path.title}
                     </h3>
                     <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-3">
