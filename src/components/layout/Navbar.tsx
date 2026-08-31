@@ -12,8 +12,8 @@ interface NavbarProps {
 
 export default function Navbar({ onOpenSearch, onToggleSidebar }: NavbarProps) {
   return (
-    <header className="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md transition-colors">
-      <div className="flex h-14 w-full items-center justify-between px-4 sm:px-6 lg:px-8">
+    <header suppressHydrationWarning className="sticky top-0 z-40 w-full border-b border-slate-200 dark:border-slate-800 bg-white/95 dark:bg-slate-950/95 backdrop-blur-md transition-colors">
+      <div suppressHydrationWarning className="flex h-14 w-full items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Left: Mobile TOC Toggle & Title */}
         <div className="flex items-center gap-3">
           {onToggleSidebar && (

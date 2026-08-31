@@ -2,6 +2,7 @@
 
 import React from 'react';
 import { RealLifeAnalogy } from '@/types';
+import { RenderInlineText } from './MarkdownContent';
 import { 
   FileText, 
   Sparkles, 
@@ -51,7 +52,7 @@ export default function MentalModelCard({ analogy }: MentalModelCardProps) {
 
       {/* Analogy Story Text */}
       <p className="text-xs sm:text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-        {analogy.explanation}
+        <RenderInlineText text={analogy.explanation} />
       </p>
 
       {/* Horizontal Pipeline Steps */}
@@ -81,11 +82,11 @@ export default function MentalModelCard({ analogy }: MentalModelCardProps) {
                     </span>
 
                     <h4 className="text-xs font-bold text-slate-900 dark:text-white mt-0.5">
-                      {step.title}
+                      <RenderInlineText text={step.title} />
                     </h4>
 
                     <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-1 leading-tight line-clamp-2">
-                      {step.subtitle}
+                      <RenderInlineText text={step.subtitle} />
                     </p>
                   </div>
 
@@ -96,7 +97,7 @@ export default function MentalModelCard({ analogy }: MentalModelCardProps) {
                         <div className="flex flex-col items-center gap-1">
                           <Cog className="h-3.5 w-3.5 animate-spin text-sky-500 dark:text-cyan-400" />
                           <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-sky-600 dark:text-cyan-400 bg-sky-100 dark:bg-sky-950 px-1.5 py-0.5 rounded border border-sky-200 dark:border-sky-800">
-                            {connector}
+                            <RenderInlineText text={connector} />
                           </span>
                         </div>
                       ) : (
