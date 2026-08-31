@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { WifiOff } from 'lucide-react';
+import PwaInstallModal from './PwaInstallModal';
 
 export default function PwaRegister() {
   const [isOffline, setIsOffline] = useState<boolean>(false);
@@ -49,12 +50,18 @@ export default function PwaRegister() {
     };
   }, []);
 
-  if (!isOffline) return null;
-
   return (
-    <div className="fixed bottom-4 right-4 z-50 flex items-center gap-2 rounded-xl border border-amber-500/40 bg-zinc-900/95 px-3 py-2 text-xs font-semibold text-amber-300 shadow-xl backdrop-blur-md">
-      <WifiOff className="h-4 w-4 text-amber-400" />
-      <span>Offline Mode Active • Reading from Cache</span>
-    </div>
+    <>
+      {/* Native App Installation Modal Prompt */}
+      <PwaInstallModal />
+
+      {/* Offline Alert Indicator */}
+      {isOffline && (
+        <div className="fixed bottom-4 right-4 z-[9998] flex items-center gap-2 rounded-xl border border-amber-500/40 bg-zinc-900/95 px-3.5 py-2 text-xs font-semibold text-amber-300 shadow-xl backdrop-blur-md animate-in fade-in slide-in-from-bottom-2">
+          <WifiOff className="h-4 w-4 text-amber-400 shrink-0" />
+          <span>Offline Mode • Reading from Cached Storage</span>
+        </div>
+      )}
+    </>
   );
 }

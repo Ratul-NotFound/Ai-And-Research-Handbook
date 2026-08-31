@@ -15,7 +15,12 @@ import {
   ArrowUp,
   FileCode,
   ShieldCheck,
-  Cpu
+  Cpu,
+  Globe,
+  ExternalLink,
+  Code2,
+  MessageSquareText,
+  Boxes
 } from 'lucide-react';
 
 export default function Footer() {
@@ -29,7 +34,7 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12 sm:py-16">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8 lg:gap-12">
           
-          {/* Col 1 & 2: Brand, Identity & Mission (Takes 2 cols on lg) */}
+          {/* Col 1 & 2: Brand, Identity, Creator & Mission */}
           <div className="lg:col-span-2 space-y-4">
             <Link href="/" className="inline-flex items-center gap-2.5 group">
               <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white shadow-md shadow-indigo-500/20 group-hover:scale-105 transition-transform">
@@ -46,10 +51,43 @@ export default function Footer() {
             </Link>
 
             <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed max-w-md">
-              A masterclass digital encyclopedia covering modern artificial intelligence, foundation LLMs, autonomous agent swarms, vector retrieval, deep learning architectures, and CS research methodology from mathematical first principles.
+              An open-access digital masterclass covering foundation LLMs, autonomous agent swarms, vector retrieval, deep learning architectures, and CS research methodology from mathematical first principles.
             </p>
 
-            <div className="flex flex-wrap items-center gap-3 pt-2">
+            {/* AUTHOR / CREATOR SPOTLIGHT CARD */}
+            <div className="p-3.5 rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-slate-50/80 dark:bg-slate-900/50 space-y-2 max-w-md shadow-2xs">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-indigo-600 text-white font-mono text-xs font-bold shadow-xs">
+                    R
+                  </div>
+                  <div>
+                    <span className="text-xs font-bold text-slate-950 dark:text-white block leading-tight">
+                      Mahmud Hasan Ratul
+                    </span>
+                    <span className="text-[10px] font-mono text-indigo-600 dark:text-indigo-400 font-medium">
+                      Author & Platform Architect
+                    </span>
+                  </div>
+                </div>
+
+                <a
+                  href="https://ratul-dev.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-[11px] font-bold text-indigo-600 dark:text-indigo-400 hover:underline bg-white dark:bg-slate-800 px-2.5 py-1 rounded-md border border-slate-200 dark:border-slate-700 shadow-2xs"
+                >
+                  <Globe className="h-3 w-3" />
+                  <span>Portfolio</span>
+                  <ExternalLink className="h-2.5 w-2.5 ml-0.5 opacity-70" />
+                </a>
+              </div>
+              <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight">
+                Full-Stack Developer & AI Automation Engineer specializing in High-Performance Web Systems, Autonomous Agent Workflows & Scalable Architectures.
+              </p>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2.5 pt-1">
               <span className="inline-flex items-center gap-1.5 rounded-lg border border-emerald-200 dark:border-emerald-900/60 bg-emerald-50 dark:bg-emerald-950/40 px-2.5 py-1 text-[11px] font-medium text-emerald-700 dark:text-emerald-300">
                 <Smartphone className="h-3.5 w-3.5" />
                 Offline Ready (PWA)
@@ -78,16 +116,16 @@ export default function Footer() {
                   className="hover:text-purple-600 dark:hover:text-purple-400 transition-colors flex items-center gap-1.5"
                 >
                   <Bot className="h-3.5 w-3.5 text-purple-500 shrink-0" />
-                  <span>Modern AI & Agents (15 Ch)</span>
+                  <span>Vol 01: Modern AI & Agents</span>
                 </Link>
               </li>
               <li>
                 <Link
                   href="/topic/nlp-llms"
-                  className="hover:text-pink-600 dark:hover:text-pink-400 transition-colors flex items-center gap-1.5"
+                  className="hover:text-rose-600 dark:hover:text-rose-400 transition-colors flex items-center gap-1.5"
                 >
-                  <Brain className="h-3.5 w-3.5 text-pink-500 shrink-0" />
-                  <span>NLP & LLMs (15 Ch)</span>
+                  <MessageSquareText className="h-3.5 w-3.5 text-rose-500 shrink-0" />
+                  <span>Vol 05: NLP & LLMs</span>
                 </Link>
               </li>
               <li>
@@ -95,27 +133,43 @@ export default function Footer() {
                   href="/topic/deep-learning"
                   className="hover:text-violet-600 dark:hover:text-violet-400 transition-colors flex items-center gap-1.5"
                 >
-                  <Binary className="h-3.5 w-3.5 text-violet-500 shrink-0" />
-                  <span>Deep Learning (15 Ch)</span>
+                  <Cpu className="h-3.5 w-3.5 text-violet-500 shrink-0" />
+                  <span>Vol 06: Deep Learning</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/book/model-context-protocol-mcp-architecture"
+                  className="hover:text-slate-900 dark:hover:text-white transition-colors block text-[11px] text-slate-500 dark:text-slate-400 pl-5"
+                >
+                  • Model Context Protocol (MCP)
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/book/reasoning-models-o1-o3-deepseek-r1-mechanics"
+                  className="hover:text-slate-900 dark:hover:text-white transition-colors block text-[11px] text-slate-500 dark:text-slate-400 pl-5"
+                >
+                  • Reasoning Models (o1/o3/R1)
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 4: Foundations & Research Textbooks */}
+          {/* Col 4: Mathematical Foundations & Research */}
           <div className="space-y-3">
             <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-950 dark:text-white flex items-center gap-1.5">
-              <GraduationCap className="h-3.5 w-3.5 text-emerald-500" />
-              Foundations
+              <Sigma className="h-3.5 w-3.5 text-blue-500" />
+              Math & Methodology
             </h4>
             <ul className="space-y-2 text-xs">
               <li>
                 <Link
-                  href="/topic/machine-learning"
-                  className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1.5"
+                  href="/topic/mathematics"
+                  className="hover:text-blue-600 dark:hover:text-blue-400 transition-colors flex items-center gap-1.5"
                 >
-                  <Cpu className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
-                  <span>Machine Learning (15 Ch)</span>
+                  <Sigma className="h-3.5 w-3.5 text-blue-500 shrink-0" />
+                  <span>Vol 02: Math Foundations</span>
                 </Link>
               </li>
               <li>
@@ -124,28 +178,67 @@ export default function Footer() {
                   className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors flex items-center gap-1.5"
                 >
                   <GraduationCap className="h-3.5 w-3.5 text-sky-500 shrink-0" />
-                  <span>CS Research Methodology (18 Ch)</span>
+                  <span>Vol 03: CS Research</span>
                 </Link>
               </li>
               <li>
                 <Link
-                  href="/topic/mathematics"
-                  className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-1.5"
+                  href="/topic/classical-ml"
+                  className="hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors flex items-center gap-1.5"
                 >
-                  <Sigma className="h-3.5 w-3.5 text-indigo-500 shrink-0" />
-                  <span>Math for AI (11 Ch)</span>
+                  <Boxes className="h-3.5 w-3.5 text-emerald-500 shrink-0" />
+                  <span>Vol 04: Classical ML</span>
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/book/vector-spaces-matrix-geometry"
+                  className="hover:text-slate-900 dark:hover:text-white transition-colors block text-[11px] text-slate-500 dark:text-slate-400 pl-5"
+                >
+                  • SVD & Vector Spaces
+                </Link>
+              </li>
+              <li>
+                <Link
+                  href="/book/what-is-research-methodology"
+                  className="hover:text-slate-900 dark:hover:text-white transition-colors block text-[11px] text-slate-500 dark:text-slate-400 pl-5"
+                >
+                  • Snowballing Search Method
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Col 5: Reference & Tools */}
+          {/* Col 5: Platform & Author Links */}
           <div className="space-y-3">
             <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-slate-950 dark:text-white flex items-center gap-1.5">
-              <FileCode className="h-3.5 w-3.5 text-amber-500" />
-              Quick Tools
+              <FileCode className="h-3.5 w-3.5 text-indigo-500" />
+              Creator & Resources
             </h4>
             <ul className="space-y-2 text-xs">
+              <li>
+                <a
+                  href="https://ratul-dev.vercel.app/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors flex items-center gap-1.5 font-semibold text-slate-800 dark:text-slate-200"
+                >
+                  <Globe className="h-3.5 w-3.5 text-indigo-500" />
+                  <span>Ratul's Portfolio</span>
+                  <ExternalLink className="h-2.5 w-2.5 opacity-60" />
+                </a>
+              </li>
+              <li>
+                <a
+                  href="https://github.com/Ratul-NotFound"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-slate-900 dark:hover:text-white transition-colors flex items-center gap-1.5"
+                >
+                  <Code2 className="h-3.5 w-3.5 text-slate-400" />
+                  <span>GitHub: @Ratul-NotFound</span>
+                </a>
+              </li>
               <li>
                 <Link
                   href="/cheatsheet"
@@ -163,16 +256,8 @@ export default function Footer() {
                   className="hover:text-sky-600 dark:hover:text-cyan-400 transition-colors flex items-center gap-1.5 text-left"
                 >
                   <Search className="h-3.5 w-3.5 text-slate-400" />
-                  <span>Global Search (⌘K / Ctrl+K)</span>
+                  <span>Global Search (⌘K)</span>
                 </button>
-              </li>
-              <li>
-                <Link
-                  href="/"
-                  className="hover:text-slate-900 dark:hover:text-white transition-colors"
-                >
-                  <span>Platform Portal Home</span>
-                </Link>
               </li>
             </ul>
           </div>
@@ -184,12 +269,12 @@ export default function Footer() {
       <div className="border-t border-slate-200 dark:border-slate-800/60 bg-slate-50 dark:bg-[#050810] py-4 text-xs">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-3 text-slate-500 dark:text-slate-400">
           <div className="flex items-center gap-2">
-            <span>© {new Date().getFullYear()} AI Research Handbook. Open Knowledge Initiative.</span>
+            <span>© {new Date().getFullYear()} AI & Research Handbook. Authored & Architected by <a href="https://ratul-dev.vercel.app/" target="_blank" rel="noopener noreferrer" className="font-bold text-indigo-600 dark:text-indigo-400 hover:underline">Mahmud Hasan Ratul</a>.</span>
           </div>
 
           <div className="flex items-center gap-4">
             <span className="hidden sm:inline text-slate-400 dark:text-slate-500">
-              First-principles education for engineers & researchers
+              Open-Access First-Principles Monograph
             </span>
             <button
               onClick={scrollToTop}

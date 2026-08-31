@@ -2,7 +2,7 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { BookOpen, Search, Menu, Compass } from 'lucide-react';
+import { BookOpen, Search, Menu, Compass, Download } from 'lucide-react';
 import ThemeToggle from '@/components/theme/ThemeToggle';
 
 interface NavbarProps {
@@ -56,13 +56,18 @@ export default function Navbar({ onOpenSearch, onToggleSidebar }: NavbarProps) {
             </button>
           )}
 
-          <Link
-            href="/cheatsheet"
-            className="flex items-center gap-1.5 rounded-lg border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/80 px-3 py-1.5 text-xs font-medium text-slate-700 dark:text-slate-300 transition-colors hover:border-slate-300 dark:hover:border-slate-700 hover:text-slate-900 dark:hover:text-white"
+          <button
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                window.dispatchEvent(new CustomEvent('open-pwa-install'));
+              }
+            }}
+            className="hidden md:inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50 dark:bg-indigo-950/50 px-2.5 py-1.5 text-xs font-semibold text-indigo-700 dark:text-indigo-300 transition-all hover:bg-indigo-100 dark:hover:bg-indigo-900/80 cursor-pointer shadow-2xs"
+            title="Install as native Android / Desktop app"
           >
-            <Compass className="h-3.5 w-3.5 text-violet-500" />
-            <span className="hidden sm:inline">Cheatsheets</span>
-          </Link>
+            <Download className="h-3.5 w-3.5 text-indigo-600 dark:text-indigo-400" />
+            <span>Install App</span>
+          </button>
 
           <ThemeToggle />
         </div>

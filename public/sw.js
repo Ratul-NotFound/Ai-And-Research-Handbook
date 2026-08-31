@@ -1,19 +1,24 @@
-const CACHE_NAME = 'ai-book-v2';
-const STATIC_ASSETS = [
+const CACHE_NAME = 'ai-handbook-pwa-v3';
+
+const STATIC_PRECACHE = [
   '/',
   '/cheatsheet',
   '/manifest.json',
+  '/icon.svg',
+  'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css',
 ];
 
+// Install Event: Pre-cache core shell assets
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => {
-      return cache.addAll(STATIC_ASSETS);
+      return cache.addAll(STATIC_PRECACHE);
     })
   );
   self.skipWaiting();
 });
 
+// Activate Event: Cleanup stale caches & take control immediately
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((cacheNames) => {
@@ -27,48 +32,41 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
+// Fetch Event: Offline-first stale-while-revalidate strategy
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
-  // Only handle http and https requests (ignore chrome-extension, blob, etc.)
   const url = new URL(event.request.url);
+
+  // Ignore non-http requests (chrome-extension, blob, data)
   if (!url.protocol.startsWith('http')) return;
 
+  // Stale-While-Revalidate Strategy for all navigation and resource requests
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) {
-        // Return cached, then fetch in background (stale-while-revalidate)
-        fetch(event.request)
-          .then((networkResponse) => {
-            if (networkResponse && networkResponse.status === 200 && (url.protocol === 'http:' || url.protocol === 'https:')) {
-              caches.open(CACHE_NAME).then((cache) => {
-                cache.put(event.request, networkResponse);
-              }).catch(() => {});
-            }
-          })
-          .catch(() => {});
-        return cachedResponse;
-      }
-
-      return fetch(event.request)
+      const fetchPromise = fetch(event.request)
         .then((networkResponse) => {
-          if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
-            return networkResponse;
-          }
-          if (url.protocol === 'http:' || url.protocol === 'https:') {
-            const responseToCache = networkResponse.clone();
+          if (
+            networkResponse &&
+            networkResponse.status === 200 &&
+            (networkResponse.type === 'basic' || networkResponse.type === 'cors')
+          ) {
+            const responseClone = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => {
-              cache.put(event.request, responseToCache);
+              cache.put(event.request, responseClone);
             }).catch(() => {});
           }
           return networkResponse;
         })
         .catch(() => {
-          // Fallback for HTML page navigation
+          // If offline and request is an HTML page navigation, fallback to root page or cached route
           if (event.request.headers.get('accept')?.includes('text/html')) {
-            return caches.match('/');
+            return caches.match(event.request).then((res) => res || caches.match('/'));
           }
         });
+
+      // Return cached version immediately if available, otherwise wait for network
+      return cachedResponse || fetchPromise;
     })
   );
 });

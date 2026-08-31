@@ -1,18 +1,58 @@
 {
-  "name": "AI Research Living Book",
+  "id": "ai-research-handbook-app",
+  "name": "The Living AI & CS Research Handbook",
   "short_name": "AI Handbook",
-  "description": "Comprehensive First-Principles AI, ML, Deep Learning & LLM Research Handbook with offline reading.",
+  "description": "Comprehensive First-Principles AI, ML, Deep Learning, Modern LLMs & CS Research Handbook with full offline access.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "background_color": "#09090b",
-  "theme_color": "#09090b",
-  "orientation": "portrait-primary",
+  "display_override": ["standalone", "minimal-ui", "window-controls-overlay"],
+  "background_color": "#0b0f19",
+  "theme_color": "#4f46e5",
+  "orientation": "any",
+  "categories": ["education", "books", "reference", "productivity"],
   "icons": [
     {
       "src": "/icon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
+    },
+    {
+      "src": "/icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Modern AI & Agents",
+      "short_name": "Modern AI",
+      "description": "LLM Internals, Reasoning Models & Swarms",
+      "url": "/topic/modern-ai-agents",
+      "icons": [{ "src": "/icon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Mathematical Foundations",
+      "short_name": "Math for AI",
+      "description": "Vectors, SVD, Gradients & Information Theory",
+      "url": "/topic/mathematics",
+      "icons": [{ "src": "/icon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "CS Research Methodology",
+      "short_name": "CS Research",
+      "description": "Snowballing Literature & Leak-Free Protocols",
+      "url": "/topic/research-methodology",
+      "icons": [{ "src": "/icon.svg", "sizes": "any" }]
+    },
+    {
+      "name": "Master Cheatsheets",
+      "short_name": "Cheatsheets",
+      "description": "Quick Formulas & High-Yield Diagrams",
+      "url": "/cheatsheet",
+      "icons": [{ "src": "/icon.svg", "sizes": "any" }]
     }
   ]
 }

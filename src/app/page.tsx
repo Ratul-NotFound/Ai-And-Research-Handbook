@@ -1,195 +1,235 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/layout/Navbar';
 import MobileDrawer from '@/components/layout/MobileDrawer';
 import Footer from '@/components/layout/Footer';
 import CommandPalette from '@/components/search/CommandPalette';
+import AuthenticBook, { AuthenticBookProps } from '@/components/home/AuthenticBook';
 import { 
+  Bot, 
+  Sigma, 
+  GraduationCap, 
+  Boxes, 
+  MessageSquareText, 
+  Cpu, 
+  Search, 
+  Compass, 
+  Sparkles,
+  BookOpen,
+  Route,
+  Zap,
+  CheckCircle2,
+  Layers,
+  ArrowRight
+} from 'lucide-react';
+import { 
+  ModernAiCardBackdrop, 
+  MathematicsCardBackdrop, 
   CsResearchCardBackdrop, 
   MachineLearningCardBackdrop, 
-  DeepLearningCardBackdrop,
-  ModernAiCardBackdrop,
-  NlpCardBackdrop,
-  MathematicsCardBackdrop
+  NlpCardBackdrop, 
+  DeepLearningCardBackdrop 
 } from '@/components/home/CardBackdrops';
-import { 
-  BookOpen, 
-  Compass, 
-  Search, 
-  GraduationCap,
-  Boxes,
-  Cpu,
-  Bot,
-  MessageSquareText,
-  Sigma,
-  Sparkles,
-  ChevronRight,
-  CheckCircle2,
-} from 'lucide-react';
-
-interface MasterPath {
-  id: string;
-  title: string;
-  badge: string;
-  topicCount: number;
-  chapterCount: number;
-  description: string;
-  icon: React.ReactNode;
-  iconBg: string;
-  cardGradient: string;
-  borderClass: string;
-  badgeClass: string;
-  primaryButton: string;
-  pathUrl: string;
-  startChapterUrl: string;
-  highlights: string[];
-}
 
 export default function HomePage() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState<'all' | 'agents' | 'math-research' | 'ml-nlp'>('all');
 
-  // 6 Flagship Curriculum Portals in exact requested sequence:
+  // 6 Primary Hardbound Textbooks in exact requested order:
   // 1. Modern AI -> 2. Math -> 3. Research Methodology -> 4. ML -> 5. NLP -> 6. Deep Learning
-  const masterPaths: MasterPath[] = [
+  const allBooks: (AuthenticBookProps & { filterCategory: 'agents' | 'math-research' | 'ml-nlp' })[] = [
     {
       id: 'modern-ai-agents',
-      title: 'Modern AI & Autonomous Smart Systems',
-      badge: '15 In-Depth Chapters',
-      topicCount: 1,
+      volume: 'VOL. 01',
+      romanNumeral: 'VOLUME I',
+      publisherSeries: 'AUTONOMOUS SYSTEMS MONOGRAPH',
+      title: 'Modern AI & Autonomous Systems',
+      subtitle: 'LLMs, Reasoning Engines, MCP & Swarms',
+      editionLabel: 'FIRST-PRINCIPLES EDITION',
       chapterCount: 15,
-      description: 'From foundation LLMs, reasoning models (o1/o3), and generative multimodal AI to autonomous agents, Model Context Protocol (MCP), role-based swarms, and advanced RAG.',
-      icon: <Bot className="h-6 w-6 text-purple-600 dark:text-purple-400" />,
-      iconBg: 'bg-purple-50 dark:bg-purple-950/80 border-purple-200/80 dark:border-purple-800 text-purple-600 dark:text-purple-400',
-      cardGradient: 'from-purple-500/[0.06] via-purple-500/[0.01] to-transparent dark:from-purple-500/[0.09] dark:via-transparent dark:to-transparent',
-      borderClass: 'border-purple-200/90 dark:border-purple-900/80 hover:border-purple-500 dark:hover:border-purple-400 hover:shadow-xl hover:shadow-purple-500/[0.08]',
-      badgeClass: 'bg-purple-50 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800',
-      primaryButton: 'bg-purple-600 hover:bg-purple-700 text-white shadow-xs hover:shadow-md hover:shadow-purple-500/20',
+      readTime: '4.5 hrs',
+      filterCategory: 'agents',
+      coverStyles: {
+        coverBg: 'bg-[#1a1c38]',
+        clothTexture: 'bg-gradient-to-br from-[#24274c] via-[#1a1c38] to-[#111224]',
+        foilColor: 'text-indigo-300 font-bold',
+        foilBorder: 'border-indigo-400/30',
+        spineColor: 'bg-[#15172e]',
+        badgeStyle: 'bg-indigo-900/60 text-indigo-200 border-indigo-500/40',
+        emblemBg: 'bg-[#111326]/80',
+      },
+      emblemSvg: <ModernAiCardBackdrop />,
       pathUrl: '/topic/modern-ai-agents',
-      startChapterUrl: '/book/how-modern-llms-work-internals-tokens-kvcache',
-      highlights: [
-        'LLM Internals, Tokens, Generation Loops & KV-Cache',
-        'Reasoning Models (o1/o3/R1) & Test-Time Thinking',
-        'Tool Calling, Function Calling & Model Context Protocol (MCP)',
-        'Autonomous Agents, Swarms (LangGraph) & GraphRAG',
+      startUrl: '/book/how-modern-llms-work-internals-tokens-kvcache',
+      syllabusHighlights: [
+        'Autoregressive KV-Caching & Token Logits',
+        'Reasoning Models (o1, o3, DeepSeek-R1)',
+        'Model Context Protocol (MCP) Standards',
+        'Multi-Agent Swarms & LangGraph Teams',
       ]
     },
     {
       id: 'mathematics',
+      volume: 'VOL. 02',
+      romanNumeral: 'VOLUME II',
+      publisherSeries: 'MATHEMATICAL FOUNDATIONS',
       title: 'Mathematical Foundations for AI',
-      badge: 'Rigorous Math',
-      topicCount: 3,
+      subtitle: 'Vector Spaces, SVD, Gradients & Entropy',
+      editionLabel: 'RIGOROUS PROOFS EDITION',
       chapterCount: 11,
-      description: 'High-dimensional vector spaces, SVD low-rank matrix approximations, Vector-Jacobian Products (VJPs), non-convex optimization loss landscapes, Maximum Likelihood, and Information Theory.',
-      icon: <Sigma className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />,
-      iconBg: 'bg-indigo-50 dark:bg-indigo-950/80 border-indigo-200/80 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400',
-      cardGradient: 'from-indigo-500/[0.05] via-indigo-500/[0.01] to-transparent dark:from-indigo-500/[0.08] dark:via-transparent dark:to-transparent',
-      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-500/80 hover:shadow-xl hover:shadow-indigo-500/[0.06]',
-      badgeClass: 'bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800',
-      primaryButton: 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs hover:shadow-md hover:shadow-indigo-500/20',
+      readTime: '3.5 hrs',
+      filterCategory: 'math-research',
+      coverStyles: {
+        coverBg: 'bg-[#0f2438]',
+        clothTexture: 'bg-gradient-to-br from-[#163654] via-[#0f2438] to-[#0a1724]',
+        foilColor: 'text-sky-300 font-bold',
+        foilBorder: 'border-sky-400/30',
+        spineColor: 'bg-[#0b1c2c]',
+        badgeStyle: 'bg-sky-900/60 text-sky-200 border-sky-500/40',
+        emblemBg: 'bg-[#081522]/80',
+      },
+      emblemSvg: <MathematicsCardBackdrop />,
       pathUrl: '/topic/mathematics',
-      startChapterUrl: '/book/vector-spaces-matrix-geometry',
-      highlights: [
-        'Vector Spaces, Basis Transformations & SVD Decompositions',
-        'Multivariate Gradients, Hessians & Taylor Approximations',
-        'Probability Distributions, Maximum Likelihood & Bayes Rule',
-        'Information Theory: Entropy, Cross-Entropy & KL Divergence',
+      startUrl: '/book/vector-spaces-matrix-geometry',
+      syllabusHighlights: [
+        'Vector Spaces, Linear Maps & SVD',
+        'Multivariate Gradients & Hessians',
+        'Probability Theory & Maximum Likelihood',
+        'Information Theory & KL Divergence',
       ]
     },
     {
       id: 'cs-research',
+      volume: 'VOL. 03',
+      romanNumeral: 'VOLUME III',
+      publisherSeries: 'RESEARCH METHODOLOGY',
       title: 'CS Research Methodology',
-      badge: 'Scientific Method',
-      topicCount: 6,
+      subtitle: 'Formulation, Snowballing & Paper Writing',
+      editionLabel: 'SCIENTIFIC FRAMEWORK',
       chapterCount: 18,
-      description: 'The complete end-to-end framework for formulation, snowballing literature search, data collection & DVC provenance, leak-free training protocols, and pre-submission conference verification.',
-      icon: <GraduationCap className="h-6 w-6 text-sky-600 dark:text-cyan-400" />,
-      iconBg: 'bg-sky-50 dark:bg-sky-950/80 border-sky-200/80 dark:border-sky-800 text-sky-600 dark:text-cyan-400',
-      cardGradient: 'from-sky-500/[0.05] via-sky-500/[0.01] to-transparent dark:from-sky-500/[0.08] dark:via-transparent dark:to-transparent',
-      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-sky-400 dark:hover:border-sky-500/80 hover:shadow-xl hover:shadow-sky-500/[0.06]',
-      badgeClass: 'bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-cyan-300 border-sky-200 dark:border-sky-800',
-      primaryButton: 'bg-sky-600 hover:bg-sky-700 text-white shadow-xs hover:shadow-md hover:shadow-sky-500/20',
+      readTime: '5.0 hrs',
+      filterCategory: 'math-research',
+      coverStyles: {
+        coverBg: 'bg-[#18262f]',
+        clothTexture: 'bg-gradient-to-br from-[#233744] via-[#18262f] to-[#0e181e]',
+        foilColor: 'text-cyan-300 font-bold',
+        foilBorder: 'border-cyan-400/30',
+        spineColor: 'bg-[#121d24]',
+        badgeStyle: 'bg-cyan-900/60 text-cyan-200 border-cyan-500/40',
+        emblemBg: 'bg-[#0b1318]/80',
+      },
+      emblemSvg: <CsResearchCardBackdrop />,
       pathUrl: '/topic/research-methodology',
-      startChapterUrl: '/book/what-is-research-methodology',
-      highlights: [
-        '5-Stage Systematic Snowballing Literature Search',
-        'Data Modality & 5-Step Leak-Free Preprocessing',
-        'Master Model Selection & 7-Step Training Protocol',
-        'Error Taxonomy (Bias, Variance, Leakage, Shift)',
+      startUrl: '/book/what-is-research-methodology',
+      syllabusHighlights: [
+        '5-Stage Snowballing Literature Discovery',
+        '5-Step Leak-Free Data Preprocessing',
+        'Model Selection & Training Protocol',
+        'Error Taxonomy (Bias, Variance, Shift)',
       ]
     },
     {
       id: 'classical-ml',
-      title: 'Machine Learning (The Complete Book)',
-      badge: '15 In-Depth Chapters',
-      topicCount: 1,
+      volume: 'VOL. 04',
+      romanNumeral: 'VOLUME IV',
+      publisherSeries: 'STATISTICAL MACHINE LEARNING',
+      title: 'Machine Learning: Complete Book',
+      subtitle: 'Convex Optim, Trees, SVMs & Optuna',
+      editionLabel: 'ALGORITHMIC WORKFLOWS',
       chapterCount: 15,
-      description: 'From first-principles foundations, data preprocessing, and convex optimization to tree ensembles (XGBoost/LightGBM/CatBoost), SVM kernels, deep neural networks, CNNs, and Optuna tuning.',
-      icon: <Boxes className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />,
-      iconBg: 'bg-emerald-50 dark:bg-emerald-950/80 border-emerald-200/80 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400',
-      cardGradient: 'from-emerald-500/[0.05] via-emerald-500/[0.01] to-transparent dark:from-emerald-500/[0.08] dark:via-transparent dark:to-transparent',
-      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-emerald-400 dark:hover:border-emerald-500/80 hover:shadow-xl hover:shadow-emerald-500/[0.06]',
-      badgeClass: 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
-      primaryButton: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs hover:shadow-md hover:shadow-emerald-500/20',
+      readTime: '4.5 hrs',
+      filterCategory: 'ml-nlp',
+      coverStyles: {
+        coverBg: 'bg-[#0f2c22]',
+        clothTexture: 'bg-gradient-to-br from-[#163f31] via-[#0f2c22] to-[#091c16]',
+        foilColor: 'text-emerald-300 font-bold',
+        foilBorder: 'border-emerald-400/30',
+        spineColor: 'bg-[#0c241c]',
+        badgeStyle: 'bg-emerald-900/60 text-emerald-200 border-emerald-500/40',
+        emblemBg: 'bg-[#071711]/80',
+      },
+      emblemSvg: <MachineLearningCardBackdrop />,
       pathUrl: '/topic/classical-ml',
-      startChapterUrl: '/book/what-is-machine-learning-foundations',
-      highlights: [
-        'ML Paradigm Shift (Data + Answers = Rules) & 9-Phase Lifecycle',
-        'Data Preprocessing, Outliers, RobustScaler & Leak-Free Splits',
-        'Linear/Logistic Regression & House Pricing Worked Calculation',
-        'Random Forest & Gradient Boosting (XGBoost, LightGBM, CatBoost)',
+      startUrl: '/book/what-is-machine-learning-foundations',
+      syllabusHighlights: [
+        'ML Paradigm Shift & 9-Phase Lifecycle',
+        'Linear/Logistic Worked Proof Calculations',
+        'Random Forest, XGBoost & LightGBM',
+        'Bayesian Search & Optuna Tuning',
       ]
     },
     {
       id: 'nlp-llms',
+      volume: 'VOL. 05',
+      romanNumeral: 'VOLUME V',
+      publisherSeries: 'COMPUTATIONAL LINGUISTICS',
       title: 'Natural Language Processing & LLMs',
-      badge: '15 In-Depth Chapters',
-      topicCount: 1,
+      subtitle: 'Tokenization, Self-Attention & LoRA',
+      editionLabel: 'TRANSFORMER MONOGRAPH',
       chapterCount: 15,
-      description: 'From linguistic hierarchies, text preprocessing, and word embeddings (Word2Vec/GloVe) to self-attention, BERT, GPT-4, LoRA fine-tuning, DPO alignment, and RAG vector search.',
-      icon: <MessageSquareText className="h-6 w-6 text-pink-600 dark:text-pink-400" />,
-      iconBg: 'bg-pink-50 dark:bg-pink-950/80 border-pink-200/80 dark:border-pink-800 text-pink-600 dark:text-pink-400',
-      cardGradient: 'from-pink-500/[0.05] via-pink-500/[0.01] to-transparent dark:from-pink-500/[0.08] dark:via-transparent dark:to-transparent',
-      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-pink-400 dark:hover:border-pink-500/80 hover:shadow-xl hover:shadow-pink-500/[0.06]',
-      badgeClass: 'bg-pink-50 dark:bg-pink-950/80 text-pink-700 dark:text-pink-300 border-pink-200 dark:border-pink-800',
-      primaryButton: 'bg-pink-600 hover:bg-pink-700 text-white shadow-xs hover:shadow-md hover:shadow-pink-500/20',
+      readTime: '4.5 hrs',
+      filterCategory: 'ml-nlp',
+      coverStyles: {
+        coverBg: 'bg-[#33111b]',
+        clothTexture: 'bg-gradient-to-br from-[#4a1a28] via-[#33111b] to-[#220a11]',
+        foilColor: 'text-rose-300 font-bold',
+        foilBorder: 'border-rose-400/30',
+        spineColor: 'bg-[#290d15]',
+        badgeStyle: 'bg-rose-900/60 text-rose-200 border-rose-500/40',
+        emblemBg: 'bg-[#1a070d]/80',
+      },
+      emblemSvg: <NlpCardBackdrop />,
       pathUrl: '/topic/nlp-llms',
-      startChapterUrl: '/book/foundations-of-nlp-linguistic-hierarchy',
-      highlights: [
-        'Linguistic Hierarchy, Text Preprocessing & BPE Tokenization',
-        'TF-IDF, Word2Vec, GloVe & FastText Subword Embeddings',
-        'Self-Attention, Transformer Blocks, BERT & GPT-4 LLMs',
-        'LoRA Fine-Tuning, DPO Alignment & Vector DB RAG Pipelines',
+      startUrl: '/book/foundations-of-nlp-linguistic-hierarchy',
+      syllabusHighlights: [
+        'Linguistic Hierarchy & BPE Tokenization',
+        'Embeddings: Word2Vec, GloVe & FastText',
+        'Self-Attention Math & Transformers',
+        'PEFT Tuning: LoRA, QLoRA & DPO',
       ]
     },
     {
       id: 'deep-learning',
-      title: 'Deep Learning (From Neurons to Transformers)',
-      badge: '15 In-Depth Chapters',
-      topicCount: 1,
+      volume: 'VOL. 06',
+      romanNumeral: 'VOLUME VI',
+      publisherSeries: 'NEURAL NETWORKS & DEEP LEARNING',
+      title: 'Deep Learning: Neurons to SOTA',
+      subtitle: 'Perceptrons, CNNs, ResNets & Diffusion',
+      editionLabel: 'NEURAL ARCHITECTURES',
       chapterCount: 15,
-      description: 'From artificial neurons, activation functions, and backpropagation to CNNs, ResNet, LSTMs, Self-Attention, Transformers (BERT/GPT), Diffusion Generative models, and TensorRT deployment.',
-      icon: <Cpu className="h-6 w-6 text-violet-600 dark:text-violet-400" />,
-      iconBg: 'bg-violet-50 dark:bg-violet-950/80 border-violet-200/80 dark:border-violet-800 text-violet-600 dark:text-violet-400',
-      cardGradient: 'from-violet-500/[0.05] via-violet-500/[0.01] to-transparent dark:from-violet-500/[0.08] dark:via-transparent dark:to-transparent',
-      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-violet-400 dark:hover:border-violet-500/80 hover:shadow-xl hover:shadow-violet-500/[0.06]',
-      badgeClass: 'bg-violet-50 dark:bg-violet-950/80 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-800',
-      primaryButton: 'bg-violet-600 hover:bg-violet-700 text-white shadow-xs hover:shadow-md hover:shadow-violet-500/20',
+      readTime: '4.5 hrs',
+      filterCategory: 'ml-nlp',
+      coverStyles: {
+        coverBg: 'bg-[#28133b]',
+        clothTexture: 'bg-gradient-to-br from-[#3b1c56] via-[#28133b] to-[#1a0c27]',
+        foilColor: 'text-violet-300 font-bold',
+        foilBorder: 'border-violet-400/30',
+        spineColor: 'bg-[#200f30]',
+        badgeStyle: 'bg-violet-900/60 text-violet-200 border-violet-500/40',
+        emblemBg: 'bg-[#150920]/80',
+      },
+      emblemSvg: <DeepLearningCardBackdrop />,
       pathUrl: '/topic/deep-learning',
-      startChapterUrl: '/book/the-perceptron-artificial-neuron',
-      highlights: [
-        'The Perceptron, Activation Zoo & Multi-Layer Forward Pass',
-        'Backpropagation Chain Rule & Adam/AdamW Optimizers',
-        'CNNs, ResNet Skip Connections & YOLO/UNet Architectures',
-        'Self-Attention, Transformers (BERT/GPT) & Diffusion SOTA',
+      startUrl: '/book/the-perceptron-artificial-neuron',
+      syllabusHighlights: [
+        'The Perceptron & Activation Zoo',
+        'Backpropagation Chain Rule & AdamW',
+        'CNNs, ResNet Skip Connections & YOLO',
+        'Generative Modeling: Diffusion Models',
       ]
     }
   ];
 
+  const filteredBooks = useMemo(() => {
+    if (selectedCategory === 'all') return allBooks;
+    return allBooks.filter((b) => b.filterCategory === selectedCategory);
+  }, [selectedCategory, allBooks]);
+
   return (
-    <div suppressHydrationWarning className="flex min-h-[100dvh] flex-col bg-white dark:bg-[#0b0f19] text-slate-800 dark:text-slate-200 transition-colors">
+    <div suppressHydrationWarning className="flex min-h-[100dvh] flex-col bg-slate-50 dark:bg-[#0b0f19] text-slate-900 dark:text-slate-100 transition-colors">
       <Navbar
         onOpenSearch={() => setSearchOpen(true)}
         onToggleSidebar={() => setMobileDrawerOpen(true)}
@@ -202,140 +242,234 @@ export default function HomePage() {
 
       <CommandPalette isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
 
-      {/* Main Content Area */}
-      <main suppressHydrationWarning className="mx-auto flex-1 w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-10 sm:py-16 space-y-16">
+      {/* Main Container */}
+      <main suppressHydrationWarning className="mx-auto flex-1 w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-16">
         
-        {/* HERO BANNER */}
-        <section suppressHydrationWarning className="text-center space-y-4 max-w-3xl mx-auto">
-          <div suppressHydrationWarning className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 px-3.5 py-1 text-xs font-medium text-slate-700 dark:text-slate-300 shadow-2xs">
-            <Sparkles className="h-3.5 w-3.5 text-sky-500" />
-            <span>First-Principles Computer Science & AI Handbook</span>
+        {/* HERO SECTION */}
+        <section suppressHydrationWarning className="text-center space-y-4 max-w-3xl mx-auto pt-2">
+          
+          <div suppressHydrationWarning className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3.5 py-1 text-xs font-semibold shadow-2xs">
+            <Sparkles className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
+            <span className="font-mono text-[11px] uppercase tracking-wider text-slate-700 dark:text-slate-300">
+              Open-Access Library • 6 Hardbound Textbooks • 89 Chapters
+            </span>
           </div>
 
-          <h1 className="text-3xl sm:text-5xl font-black text-slate-950 dark:text-white tracking-tight leading-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 dark:text-white tracking-tight leading-tight">
             The Living Artificial Intelligence & CS Research Handbook
           </h1>
 
           <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
-            A comprehensive, offline-first curriculum designed for researchers, graduate students, and engineers. Every chapter features interactive visualizers, step-by-step decision trees, and mathematical rigor.
+            A comprehensive digital library of first-principles AI textbooks. Engineered for researchers, software engineers, and graduate scholars with mathematical proofs, workflow decision trees, and interactive visualizers.
           </p>
 
-          <div suppressHydrationWarning className="pt-2 flex items-center justify-center gap-3 flex-wrap">
+          <div suppressHydrationWarning className="pt-1 flex items-center justify-center gap-3 flex-wrap">
             <button
               onClick={() => setSearchOpen(true)}
-              className="flex items-center gap-2 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-2.5 text-xs font-bold shadow-xs hover:bg-sky-600 dark:hover:bg-cyan-300 transition-colors"
+              className="flex items-center gap-2 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-2.5 text-xs font-bold shadow-xs hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors"
             >
-              <Search className="h-3.5 w-3.5" />
-              <span>Search Handbook (⌘K)</span>
+              <Search className="h-4 w-4" />
+              <span>Search Library (⌘K)</span>
             </button>
 
             <Link
               href="/cheatsheet"
-              className="flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900 px-5 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              className="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-5 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 transition-colors shadow-2xs"
             >
-              <Compass className="h-3.5 w-3.5 text-violet-500" />
+              <Compass className="h-4 w-4 text-purple-600 dark:text-purple-400" />
               <span>Master Cheatsheet</span>
             </Link>
           </div>
         </section>
 
-        {/* 6 PRIMARY CURRICULUM PATHS (Separated Domain Portals) */}
+        {/* CURRICULUM HIGHLIGHTS STRIP */}
+        <section suppressHydrationWarning className="grid grid-cols-2 md:grid-cols-4 gap-3.5 max-w-5xl mx-auto">
+          <div className="rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/60 p-3.5 shadow-2xs">
+            <span className="font-mono text-[10px] font-bold uppercase text-purple-600 dark:text-purple-400 block mb-1">Vol I • Frontier AI</span>
+            <span className="text-xs font-bold text-slate-900 dark:text-white block">LLMs & Agent Swarms</span>
+            <span className="text-[11px] text-slate-500 dark:text-slate-400">o1, MCP, LangGraph</span>
+          </div>
+          <div className="rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/60 p-3.5 shadow-2xs">
+            <span className="font-mono text-[10px] font-bold uppercase text-blue-600 dark:text-blue-400 block mb-1">Vol II • Mathematics</span>
+            <span className="text-xs font-bold text-slate-900 dark:text-white block">Vectors & Gradients</span>
+            <span className="text-[11px] text-slate-500 dark:text-slate-400">SVD, Hessians, Entropy</span>
+          </div>
+          <div className="rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/60 p-3.5 shadow-2xs">
+            <span className="font-mono text-[10px] font-bold uppercase text-emerald-600 dark:text-emerald-400 block mb-1">Vol IV • Machine Learning</span>
+            <span className="text-xs font-bold text-slate-900 dark:text-white block">Statistical Learning</span>
+            <span className="text-[11px] text-slate-500 dark:text-slate-400">XGBoost, SVM, Optuna</span>
+          </div>
+          <div className="rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/60 p-3.5 shadow-2xs">
+            <span className="font-mono text-[10px] font-bold uppercase text-rose-600 dark:text-rose-400 block mb-1">Vol V • NLP & LLMs</span>
+            <span className="text-xs font-bold text-slate-900 dark:text-white block">Transformers & LoRA</span>
+            <span className="text-[11px] text-slate-500 dark:text-slate-400">Attention, DPO, RAG</span>
+          </div>
+        </section>
+
+        {/* 6 HARDBOUND BOOKS (Digital Shelf Grid with Filter Tabs) */}
         <section suppressHydrationWarning className="space-y-6">
-          <div suppressHydrationWarning className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
-            <div suppressHydrationWarning>
-              <span className="text-xs font-mono font-bold uppercase text-purple-600 dark:text-purple-400 block">
-                Separated Curriculum Portals
+          
+          {/* Header & Filter Controls */}
+          <div suppressHydrationWarning className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-3">
+            <div>
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400 block">
+                Curriculum Bookshelf
               </span>
-              <h2 className="text-xl sm:text-2xl font-black text-slate-950 dark:text-white tracking-tight">
-                Choose Your Research Path
+              <h2 className="text-xl font-bold text-slate-950 dark:text-white tracking-tight">
+                Textbook Volumes Directory
               </h2>
             </div>
-            <span className="text-xs font-mono text-slate-400">
-              13 Topics • 89 Chapters
-            </span>
+
+            {/* Category Filter Pills */}
+            <div className="flex items-center gap-1.5 flex-wrap">
+              <button
+                onClick={() => setSelectedCategory('all')}
+                className={`px-3 py-1 text-xs font-bold rounded-lg transition-colors ${selectedCategory === 'all' ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-950' : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
+              >
+                All Volumes (6)
+              </button>
+              <button
+                onClick={() => setSelectedCategory('agents')}
+                className={`px-3 py-1 text-xs font-bold rounded-lg transition-colors ${selectedCategory === 'agents' ? 'bg-purple-600 text-white' : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
+              >
+                Frontier AI & Agents
+              </button>
+              <button
+                onClick={() => setSelectedCategory('math-research')}
+                className={`px-3 py-1 text-xs font-bold rounded-lg transition-colors ${selectedCategory === 'math-research' ? 'bg-blue-600 text-white' : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
+              >
+                Math & Research
+              </button>
+              <button
+                onClick={() => setSelectedCategory('ml-nlp')}
+                className={`px-3 py-1 text-xs font-bold rounded-lg transition-colors ${selectedCategory === 'ml-nlp' ? 'bg-emerald-600 text-white' : 'bg-slate-100 dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'}`}
+              >
+                ML, NLP & Deep Learning
+              </button>
+            </div>
           </div>
 
-          <div suppressHydrationWarning className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-            {masterPaths.map((path) => (
-              <div
-                key={path.id}
-                suppressHydrationWarning
-                className={`group relative overflow-hidden flex flex-col justify-between rounded-2xl border bg-gradient-to-b ${path.cardGradient} bg-white dark:bg-slate-900/90 p-5 sm:p-6 shadow-xs hover:shadow-xl transition-all duration-300 ${path.borderClass}`}
-              >
-                {/* Topic-Relevant Subtle Integrated Background */}
-                {path.id === 'modern-ai-agents' && <ModernAiCardBackdrop />}
-                {path.id === 'nlp-llms' && <NlpCardBackdrop />}
-                {path.id === 'deep-learning' && <DeepLearningCardBackdrop />}
-                {path.id === 'classical-ml' && <MachineLearningCardBackdrop />}
-                {path.id === 'cs-research' && <CsResearchCardBackdrop />}
-                {path.id === 'mathematics' && <MathematicsCardBackdrop />}
-
-                <div className="relative z-10 space-y-4">
-                  {/* Top Bar: Icon + Badge + Counts */}
-                  <div className="flex items-center justify-between">
-                    <div className={`flex h-11 w-11 items-center justify-center rounded-xl border shadow-2xs group-hover:scale-105 transition-transform ${path.iconBg}`}>
-                      {path.icon}
-                    </div>
-
-                    <div className="flex items-center gap-1.5">
-                      <span className={`rounded-md border px-2 py-0.5 text-[9px] font-mono font-bold uppercase ${path.badgeClass}`}>
-                        {path.badge}
-                      </span>
-                      <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400 font-semibold bg-slate-100/70 dark:bg-slate-800/80 px-2 py-0.5 rounded-md border border-slate-200/60 dark:border-slate-700/60">
-                        {path.topicCount} Topics • {path.chapterCount} Ch
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Title & Description */}
-                  <div className="space-y-1.5 pt-1">
-                    <h3 className="text-lg font-black text-slate-950 dark:text-white tracking-tight leading-snug">
-                      {path.title}
-                    </h3>
-                    <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed line-clamp-3">
-                      {path.description}
-                    </p>
-                  </div>
-
-                  {/* Key Highlights Checklist */}
-                  <div className="pt-3 space-y-2 border-t border-slate-100 dark:border-slate-800">
-                    <span className="text-[9px] font-mono font-bold uppercase text-slate-400 dark:text-slate-500 block tracking-wider">
-                      Core Syllabus Highlights:
-                    </span>
-                    <ul className="space-y-1.5 text-xs text-slate-700 dark:text-slate-300">
-                      {path.highlights.map((h, i) => (
-                        <li key={i} className="flex items-start gap-2">
-                          <CheckCircle2 className="h-3.5 w-3.5 text-emerald-500 shrink-0 mt-0.5" />
-                          <span className="line-clamp-1">{h}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-
-                {/* Actions Footer */}
-                <div className="relative z-10 pt-5 mt-4 border-t border-slate-100 dark:border-slate-800 flex items-center gap-2">
-                  <Link
-                    href={path.pathUrl}
-                    className="flex-1 inline-flex items-center justify-center gap-1 rounded-xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700/80 px-3.5 py-2.5 text-xs font-bold text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 hover:text-slate-950 dark:hover:text-white transition-colors shadow-2xs"
-                  >
-                    <span>View Roadmap</span>
-                    <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-                  </Link>
-
-                  <Link
-                    href={path.startChapterUrl}
-                    className={`inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 text-xs font-bold shadow-xs transition-all shrink-0 ${path.primaryButton}`}
-                    title="Start Chapter 1"
-                  >
-                    <BookOpen className="h-3.5 w-3.5" />
-                    <span>Start Ch 1</span>
-                  </Link>
-                </div>
-              </div>
+          {/* Clean 3x2 Grid */}
+          <div suppressHydrationWarning className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
+            {filteredBooks.map((book) => (
+              <AuthenticBook key={book.id} {...book} />
             ))}
           </div>
         </section>
+
+        {/* STRUCTURED RECOMMENDED LEARNING PATHS */}
+        <section suppressHydrationWarning className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
+          <div>
+            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400 block">
+              Curated Study Sequences
+            </span>
+            <h2 className="text-xl font-bold text-slate-950 dark:text-white tracking-tight">
+              Recommended Learning Tracks
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {/* Track 1 */}
+            <div className="rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/40 p-4 space-y-2.5 shadow-2xs">
+              <div className="flex items-center gap-2">
+                <Route className="h-4 w-4 text-purple-600 dark:text-purple-400" />
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">The Autonomous Agent Engineer</h3>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                For engineers building production agents with MCP, function calling, tool use, and multi-agent coordination.
+              </p>
+              <div className="pt-1 flex items-center gap-1.5 text-[11px] font-mono font-semibold text-purple-600 dark:text-purple-400">
+                <span>Vol 01: Modern AI</span>
+                <span>→</span>
+                <span>Vol 05: NLP & LLMs</span>
+              </div>
+            </div>
+
+            {/* Track 2 */}
+            <div className="rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/40 p-4 space-y-2.5 shadow-2xs">
+              <div className="flex items-center gap-2">
+                <GraduationCap className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">The AI Research Scientist</h3>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                For researchers formulating scientific hypotheses, rigorous literature snowballing, and proofs.
+              </p>
+              <div className="pt-1 flex items-center gap-1.5 text-[11px] font-mono font-semibold text-blue-600 dark:text-blue-400">
+                <span>Vol 02: Math</span>
+                <span>→</span>
+                <span>Vol 03: CS Research</span>
+                <span>→</span>
+                <span>Vol 06: DL</span>
+              </div>
+            </div>
+
+            {/* Track 3 */}
+            <div className="rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/40 p-4 space-y-2.5 shadow-2xs">
+              <div className="flex items-center gap-2">
+                <Boxes className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
+                <h3 className="text-sm font-bold text-slate-900 dark:text-white">The Applied ML Practitioner</h3>
+              </div>
+              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
+                From data preprocessing, regression, and gradient boosting to neural networks and hyperparameter tuning.
+              </p>
+              <div className="pt-1 flex items-center gap-1.5 text-[11px] font-mono font-semibold text-emerald-600 dark:text-emerald-400">
+                <span>Vol 02: Math</span>
+                <span>→</span>
+                <span>Vol 04: Classical ML</span>
+                <span>→</span>
+                <span>Vol 06: DL</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* AUTHOR & PLATFORM ARCHITECT CONTRIBUTION SPOTLIGHT */}
+        <section suppressHydrationWarning className="rounded-2xl border border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-br from-indigo-50/50 via-white to-purple-50/50 dark:from-slate-900/80 dark:via-[#0c101d] dark:to-indigo-950/40 p-6 sm:p-8 shadow-xs">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            
+            <div className="flex items-center gap-4">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white font-mono text-xl font-black shadow-md shadow-indigo-500/20">
+                R
+              </div>
+              <div className="space-y-1">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h3 className="text-lg font-bold text-slate-950 dark:text-white">
+                    Mahmud Hasan Ratul
+                  </h3>
+                  <span className="font-mono text-[10px] font-bold uppercase tracking-wider bg-indigo-100 text-indigo-800 dark:bg-indigo-950/80 dark:text-indigo-300 dark:border dark:border-indigo-800 px-2 py-0.5 rounded-full">
+                    Author & Platform Architect
+                  </span>
+                </div>
+                <p className="text-xs text-slate-600 dark:text-slate-400 max-w-xl leading-relaxed">
+                  Full-Stack Developer & AI Automation Engineer specializing in High-Performance Web Systems, Autonomous Agent Workflows (MCP, LangGraph), and Scalable Cloud Architectures.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 shrink-0">
+              <a
+                href="https://ratul-dev.vercel.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-950 px-5 py-2.5 text-xs font-bold shadow-xs hover:bg-indigo-600 dark:hover:bg-indigo-100 transition-all hover:scale-105"
+              >
+                <span>View Creator Portfolio</span>
+                <ArrowRight className="h-3.5 w-3.5" />
+              </a>
+
+              <a
+                href="https://github.com/Ratul-NotFound"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 transition-colors shadow-2xs"
+              >
+                <span>GitHub</span>
+              </a>
+            </div>
+
+          </div>
+        </section>
+
       </main>
 
       <Footer />
