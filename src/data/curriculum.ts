@@ -8,6 +8,7 @@ import { csDecisionFrameworkModule } from './modules/cs-decision-framework';
 import { classicalMlModule } from './modules/classical-ml';
 import { deepLearningModule } from './modules/deep-learning';
 import { nplLlmsModule } from './modules/nlp-llms';
+import { modernAiAgentsModule } from './modules/modern-ai-agents';
 import { computerVisionModule } from './modules/computer-vision';
 import { reinforcementLearningModule } from './modules/reinforcement-learning';
 import { linearAlgebraModule } from './modules/linear-algebra';
@@ -23,6 +24,7 @@ export const AI_CURRICULUM: Module[] = [
   csDecisionFrameworkModule,
   classicalMlModule,
   deepLearningModule,
+  modernAiAgentsModule,
   nplLlmsModule,
   computerVisionModule,
   reinforcementLearningModule,

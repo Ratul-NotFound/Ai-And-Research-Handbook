@@ -271,3 +271,58 @@ export function NlpCardBackdrop() {
     </div>
   );
 }
+
+/**
+ * 6. MODERN AI & AUTONOMOUS AGENTS - INTEGRATED TOPIC BACKGROUND
+ * MCP client-server protocol hubs, agent reasoning loops, tool-calling branching, and swarm network
+ */
+export function ModernAiCardBackdrop() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-2xl">
+      {/* Ambient gradient aura */}
+      <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-purple-400/10 dark:bg-indigo-500/15 blur-3xl" />
+
+      {/* Cybernetic grid lines */}
+      <svg className="absolute inset-0 w-full h-full opacity-[0.035] dark:opacity-[0.03]" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="bg-grid-mod-ai" width="22" height="22" patternUnits="userSpaceOnUse">
+            <path d="M 0 0 L 22 22 M 22 0 L 0 22" fill="none" stroke="currentColor" strokeWidth="0.5" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#bg-grid-mod-ai)" />
+      </svg>
+
+      {/* Autonomous Agent Swarm & MCP Protocol Hub Watermark */}
+      <svg
+        className="absolute -right-6 -bottom-6 w-56 h-56 opacity-10 dark:opacity-15 text-purple-600 dark:text-indigo-400 transition-all duration-700 group-hover:scale-105 group-hover:opacity-20"
+        viewBox="0 0 200 200"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {/* Agent Supervisor Hub to Tool Workers */}
+        <path d="M 100 60 L 40 120" stroke="currentColor" strokeWidth="1.5" strokeDasharray="3 3" />
+        <path d="M 100 60 L 100 150" stroke="currentColor" strokeWidth="1.75" />
+        <path d="M 100 60 L 160 110" stroke="currentColor" strokeWidth="1.5" strokeDasharray="4 4" />
+        <path d="M 40 120 L 100 150" stroke="currentColor" strokeWidth="1.25" />
+        <path d="M 100 150 L 160 110" stroke="currentColor" strokeWidth="1.25" />
+
+        {/* Cyclic ReAct loop arc */}
+        <path d="M 75 45 A 35 35 0 0 1 125 45" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2 2" />
+
+        {/* Central Supervisor Agent Node */}
+        <circle cx="100" cy="60" r="12" stroke="currentColor" strokeWidth="2" fill="currentColor" fillOpacity="0.2" />
+        <circle cx="100" cy="60" r="4.5" fill="currentColor" />
+
+        {/* Specialist Agent Nodes */}
+        <circle cx="40" cy="120" r="9" stroke="currentColor" strokeWidth="1.5" fill="currentColor" fillOpacity="0.15" />
+        <circle cx="40" cy="120" r="3.5" fill="currentColor" />
+
+        <circle cx="100" cy="150" r="10" stroke="currentColor" strokeWidth="1.75" fill="currentColor" fillOpacity="0.15" />
+        <circle cx="100" cy="150" r="4" fill="currentColor" />
+
+        <circle cx="160" cy="110" r="9" stroke="currentColor" strokeWidth="1.5" fill="currentColor" fillOpacity="0.15" />
+        <circle cx="160" cy="110" r="3.5" fill="currentColor" />
+      </svg>
+    </div>
+  );
+}

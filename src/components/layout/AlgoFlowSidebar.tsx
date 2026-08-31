@@ -17,7 +17,8 @@ import {
   Boxes,
   Eye,
   Flame,
-  MessageSquareText
+  MessageSquareText,
+  Bot
 } from 'lucide-react';
 
 interface BookSidebarProps {
@@ -45,11 +46,19 @@ export default function BookSidebar({
   const domainList: DomainDefinition[] = useMemo(() => [
     {
       id: 'classical-ml',
-      name: 'Machine Learning (Full Book)',
-      shortName: 'Machine Learning',
+      name: 'Machine Learning (The Complete Book)',
+      shortName: 'Classical ML',
       badge: '15 Chapters',
       icon: <Boxes className="h-4 w-4 text-emerald-500" />,
       moduleIds: ['classical-ml'],
+    },
+    {
+      id: 'modern-ai-agents',
+      name: 'Modern AI & Autonomous Agents (Full Book)',
+      shortName: 'Modern AI & MCP',
+      badge: '15 Chapters',
+      icon: <Bot className="h-4 w-4 text-purple-500" />,
+      moduleIds: ['modern-ai-agents'],
     },
     {
       id: 'cs-research',

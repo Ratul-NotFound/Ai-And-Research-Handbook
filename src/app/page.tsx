@@ -10,7 +10,7 @@ import {
   CsResearchCardBackdrop, 
   MachineLearningCardBackdrop, 
   DeepLearningCardBackdrop,
-  NlpCardBackdrop,
+  ModernAiCardBackdrop,
   MathematicsCardBackdrop
 } from '@/components/home/CardBackdrops';
 import { 
@@ -20,7 +20,7 @@ import {
   GraduationCap,
   Boxes,
   Cpu,
-  MessageSquareText,
+  Bot,
   Sigma,
   Sparkles,
   ChevronRight,
@@ -52,47 +52,25 @@ export default function HomePage() {
   // 5 Flagship Curriculum Portals (Unified, Clean, Modern Architecture)
   const masterPaths: MasterPath[] = [
     {
-      id: 'cs-research',
-      title: 'CS Research Methodology',
-      badge: 'Scientific Method',
-      topicCount: 6,
-      chapterCount: 18,
-      description: 'The complete end-to-end framework for formulation, snowballing literature search, data collection & DVC provenance, leak-free training protocols, and pre-submission conference verification.',
-      icon: <GraduationCap className="h-6 w-6 text-sky-600 dark:text-cyan-400" />,
-      iconBg: 'bg-sky-50 dark:bg-sky-950/80 border-sky-200/80 dark:border-sky-800 text-sky-600 dark:text-cyan-400',
-      cardGradient: 'from-sky-500/[0.05] via-sky-500/[0.01] to-transparent dark:from-sky-500/[0.08] dark:via-transparent dark:to-transparent',
-      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-sky-400 dark:hover:border-sky-500/80 hover:shadow-xl hover:shadow-sky-500/[0.06]',
-      badgeClass: 'bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-cyan-300 border-sky-200 dark:border-sky-800',
-      primaryButton: 'bg-sky-600 hover:bg-sky-700 text-white shadow-xs hover:shadow-md hover:shadow-sky-500/20',
-      pathUrl: '/topic/research-methodology',
-      startChapterUrl: '/book/what-is-research-methodology',
-      highlights: [
-        '5-Stage Systematic Snowballing Literature Search',
-        'Data Modality & 5-Step Leak-Free Preprocessing',
-        'Master Model Selection & 7-Step Training Protocol',
-        'Error Taxonomy (Bias, Variance, Leakage, Shift)',
-      ]
-    },
-    {
-      id: 'classical-ml',
-      title: 'Machine Learning (The Complete Book)',
+      id: 'modern-ai-agents',
+      title: 'Modern AI & Autonomous Agents (Full Book)',
       badge: '15 In-Depth Chapters',
       topicCount: 1,
       chapterCount: 15,
-      description: 'From first-principles foundations, data preprocessing, and convex optimization to tree ensembles (XGBoost/LightGBM/CatBoost), SVM kernels, deep neural networks, CNNs, and Optuna tuning.',
-      icon: <Boxes className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />,
-      iconBg: 'bg-emerald-50 dark:bg-emerald-950/80 border-emerald-200/80 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400',
-      cardGradient: 'from-emerald-500/[0.05] via-emerald-500/[0.01] to-transparent dark:from-emerald-500/[0.08] dark:via-transparent dark:to-transparent',
-      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-emerald-400 dark:hover:border-emerald-500/80 hover:shadow-xl hover:shadow-emerald-500/[0.06]',
-      badgeClass: 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
-      primaryButton: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs hover:shadow-md hover:shadow-emerald-500/20',
-      pathUrl: '/topic/classical-ml',
-      startChapterUrl: '/book/what-is-machine-learning-foundations',
+      description: 'From foundation LLMs, reasoning models (o1/o3), and generative multimodal AI to autonomous agents, Model Context Protocol (MCP), role-based swarms, and advanced RAG.',
+      icon: <Bot className="h-6 w-6 text-purple-600 dark:text-purple-400" />,
+      iconBg: 'bg-purple-50 dark:bg-purple-950/80 border-purple-200/80 dark:border-purple-800 text-purple-600 dark:text-purple-400',
+      cardGradient: 'from-purple-500/[0.06] via-purple-500/[0.01] to-transparent dark:from-purple-500/[0.09] dark:via-transparent dark:to-transparent',
+      borderClass: 'border-purple-200/90 dark:border-purple-900/80 hover:border-purple-500 dark:hover:border-purple-400 hover:shadow-xl hover:shadow-purple-500/[0.08]',
+      badgeClass: 'bg-purple-50 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800',
+      primaryButton: 'bg-purple-600 hover:bg-purple-700 text-white shadow-xs hover:shadow-md hover:shadow-purple-500/20',
+      pathUrl: '/topic/modern-ai-agents',
+      startChapterUrl: '/book/modern-ai-paradigm-shift-scaling-laws',
       highlights: [
-        'ML Paradigm Shift (Data + Answers = Rules) & 9-Phase Lifecycle',
-        'Data Preprocessing, Outliers, RobustScaler & Leak-Free Splits',
-        'Linear/Logistic Regression & House Pricing Worked Calculation',
-        'Random Forest & Gradient Boosting (XGBoost, LightGBM, CatBoost)',
+        'LLM Internals, Chinchilla Scaling & KV-Cache PagedAttention',
+        'Reasoning Models (o1/o3), Test-Time Compute & Latent MCTS',
+        'Autonomous Agents, ReAct Loops & Model Context Protocol (MCP)',
+        'Multi-Agent Swarms, Advanced RAG, GraphRAG & DPO Alignment',
       ]
     },
     {
@@ -118,25 +96,47 @@ export default function HomePage() {
       ]
     },
     {
-      id: 'nlp-llms',
-      title: 'Natural Language Processing & LLMs',
+      id: 'classical-ml',
+      title: 'Machine Learning (The Complete Book)',
       badge: '15 In-Depth Chapters',
       topicCount: 1,
       chapterCount: 15,
-      description: 'From linguistic hierarchies, text preprocessing, and word embeddings (Word2Vec/GloVe) to self-attention, BERT, GPT-4, LoRA fine-tuning, DPO alignment, and RAG vector search.',
-      icon: <MessageSquareText className="h-6 w-6 text-pink-600 dark:text-pink-400" />,
-      iconBg: 'bg-pink-50 dark:bg-pink-950/80 border-pink-200/80 dark:border-pink-800 text-pink-600 dark:text-pink-400',
-      cardGradient: 'from-pink-500/[0.05] via-pink-500/[0.01] to-transparent dark:from-pink-500/[0.08] dark:via-transparent dark:to-transparent',
-      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-pink-400 dark:hover:border-pink-500/80 hover:shadow-xl hover:shadow-pink-500/[0.06]',
-      badgeClass: 'bg-pink-50 dark:bg-pink-950/80 text-pink-700 dark:text-pink-300 border-pink-200 dark:border-pink-800',
-      primaryButton: 'bg-pink-600 hover:bg-pink-700 text-white shadow-xs hover:shadow-md hover:shadow-pink-500/20',
-      pathUrl: '/topic/nlp-llms',
-      startChapterUrl: '/book/foundations-of-nlp-linguistic-hierarchy',
+      description: 'From first-principles foundations, data preprocessing, and convex optimization to tree ensembles (XGBoost/LightGBM/CatBoost), SVM kernels, deep neural networks, CNNs, and Optuna tuning.',
+      icon: <Boxes className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />,
+      iconBg: 'bg-emerald-50 dark:bg-emerald-950/80 border-emerald-200/80 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400',
+      cardGradient: 'from-emerald-500/[0.05] via-emerald-500/[0.01] to-transparent dark:from-emerald-500/[0.08] dark:via-transparent dark:to-transparent',
+      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-emerald-400 dark:hover:border-emerald-500/80 hover:shadow-xl hover:shadow-emerald-500/[0.06]',
+      badgeClass: 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+      primaryButton: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs hover:shadow-md hover:shadow-emerald-500/20',
+      pathUrl: '/topic/classical-ml',
+      startChapterUrl: '/book/what-is-machine-learning-foundations',
       highlights: [
-        'Linguistic Hierarchy, Text Preprocessing & BPE Tokenization',
-        'TF-IDF, Word2Vec, GloVe & FastText Subword Embeddings',
-        'Self-Attention, Transformer Blocks, BERT & GPT-4 LLMs',
-        'LoRA Fine-Tuning, DPO Alignment & Vector DB RAG Pipelines',
+        'ML Paradigm Shift (Data + Answers = Rules) & 9-Phase Lifecycle',
+        'Data Preprocessing, Outliers, RobustScaler & Leak-Free Splits',
+        'Linear/Logistic Regression & House Pricing Worked Calculation',
+        'Random Forest & Gradient Boosting (XGBoost, LightGBM, CatBoost)',
+      ]
+    },
+    {
+      id: 'cs-research',
+      title: 'CS Research Methodology',
+      badge: 'Scientific Method',
+      topicCount: 6,
+      chapterCount: 18,
+      description: 'The complete end-to-end framework for formulation, snowballing literature search, data collection & DVC provenance, leak-free training protocols, and pre-submission conference verification.',
+      icon: <GraduationCap className="h-6 w-6 text-sky-600 dark:text-cyan-400" />,
+      iconBg: 'bg-sky-50 dark:bg-sky-950/80 border-sky-200/80 dark:border-sky-800 text-sky-600 dark:text-cyan-400',
+      cardGradient: 'from-sky-500/[0.05] via-sky-500/[0.01] to-transparent dark:from-sky-500/[0.08] dark:via-transparent dark:to-transparent',
+      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-sky-400 dark:hover:border-sky-500/80 hover:shadow-xl hover:shadow-sky-500/[0.06]',
+      badgeClass: 'bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-cyan-300 border-sky-200 dark:border-sky-800',
+      primaryButton: 'bg-sky-600 hover:bg-sky-700 text-white shadow-xs hover:shadow-md hover:shadow-sky-500/20',
+      pathUrl: '/topic/research-methodology',
+      startChapterUrl: '/book/what-is-research-methodology',
+      highlights: [
+        '5-Stage Systematic Snowballing Literature Search',
+        'Data Modality & 5-Step Leak-Free Preprocessing',
+        'Master Model Selection & 7-Step Training Protocol',
+        'Error Taxonomy (Bias, Variance, Leakage, Shift)',
       ]
     },
     {
@@ -218,7 +218,7 @@ export default function HomePage() {
         <section suppressHydrationWarning className="space-y-6">
           <div suppressHydrationWarning className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
             <div suppressHydrationWarning>
-              <span className="text-xs font-mono font-bold uppercase text-sky-600 dark:text-cyan-400 block">
+              <span className="text-xs font-mono font-bold uppercase text-purple-600 dark:text-purple-400 block">
                 Separated Curriculum Portals
               </span>
               <h2 className="text-xl sm:text-2xl font-black text-slate-950 dark:text-white tracking-tight">
@@ -238,10 +238,10 @@ export default function HomePage() {
                 className={`group relative overflow-hidden flex flex-col justify-between rounded-2xl border bg-gradient-to-b ${path.cardGradient} bg-white dark:bg-slate-900/90 p-5 sm:p-6 shadow-xs hover:shadow-xl transition-all duration-300 ${path.borderClass}`}
               >
                 {/* Topic-Relevant Subtle Integrated Background */}
-                {path.id === 'cs-research' && <CsResearchCardBackdrop />}
-                {path.id === 'classical-ml' && <MachineLearningCardBackdrop />}
+                {path.id === 'modern-ai-agents' && <ModernAiCardBackdrop />}
                 {path.id === 'deep-learning' && <DeepLearningCardBackdrop />}
-                {path.id === 'nlp-llms' && <NlpCardBackdrop />}
+                {path.id === 'classical-ml' && <MachineLearningCardBackdrop />}
+                {path.id === 'cs-research' && <CsResearchCardBackdrop />}
                 {path.id === 'mathematics' && <MathematicsCardBackdrop />}
 
                 <div className="relative z-10 space-y-4">
