@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { AI_CURRICULUM } from '@/data/curriculum';
@@ -17,13 +17,28 @@ import {
   ChevronDown,
   ChevronRight,
   Compass,
-  CheckCircle2
+  CheckCircle2,
+  Boxes,
+  Eye,
+  Flame,
+  MessageSquareText,
+  Layers
 } from 'lucide-react';
 
 interface BookSidebarProps {
   currentModuleId?: string;
   onCloseMobile?: () => void;
   onOpenSearch?: () => void;
+}
+
+// 7 Master Dedicated Curriculum Domains
+interface DomainDefinition {
+  id: string;
+  name: string;
+  shortName: string;
+  badge: string;
+  icon: React.ReactNode;
+  moduleIds: string[];
 }
 
 export default function BookSidebar({
@@ -33,62 +48,117 @@ export default function BookSidebar({
 }: BookSidebarProps) {
   const pathname = usePathname();
 
-  // 1. Identify which domain tab the current module belongs to
-  const getDomainFromModule = (modId?: string): 'cs-research' | 'ai-core' | 'math' => {
-    if (['linear-algebra', 'calculus-optimization', 'probability-statistics'].includes(modId || '')) {
-      return 'math';
+  const domainList: DomainDefinition[] = useMemo(() => [
+    {
+      id: 'cs-research',
+      name: 'CS Research Methodology',
+      shortName: 'CS Research',
+      badge: 'Methodology',
+      icon: <GraduationCap className="h-4 w-4 text-sky-500" />,
+      moduleIds: ['research-methodology', 'data-cs-research', 'models-training', 'error-reduction', 'result-analysis', 'decision-framework'],
+    },
+    {
+      id: 'classical-ml',
+      name: 'Classical Machine Learning',
+      shortName: 'Machine Learning',
+      badge: 'Statistical ML',
+      icon: <Boxes className="h-4 w-4 text-emerald-500" />,
+      moduleIds: ['classical-ml'],
+    },
+    {
+      id: 'deep-learning',
+      name: 'Deep Learning Core & Scaling',
+      shortName: 'Deep Learning',
+      badge: 'Neural Core',
+      icon: <Cpu className="h-4 w-4 text-violet-500" />,
+      moduleIds: ['deep-learning'],
+    },
+    {
+      id: 'nlp-llms',
+      name: 'NLP & Large Language Models',
+      shortName: 'NLP & LLMs',
+      badge: 'Generative AI',
+      icon: <MessageSquareText className="h-4 w-4 text-pink-500" />,
+      moduleIds: ['nlp-llms'],
+    },
+    {
+      id: 'computer-vision',
+      name: 'Computer Vision & Generative AI',
+      shortName: 'Vision & Diffusion',
+      badge: 'Spatial Vision',
+      icon: <Eye className="h-4 w-4 text-cyan-500" />,
+      moduleIds: ['computer-vision'],
+    },
+    {
+      id: 'reinforcement-learning',
+      name: 'Reinforcement Learning & Agents',
+      shortName: 'RL & Decision',
+      badge: 'Decision SOTA',
+      icon: <Flame className="h-4 w-4 text-amber-500" />,
+      moduleIds: ['reinforcement-learning'],
+    },
+    {
+      id: 'mathematics',
+      name: 'Mathematical Foundations',
+      shortName: 'Math for AI',
+      badge: 'Rigorous Math',
+      icon: <Sigma className="h-4 w-4 text-blue-500" />,
+      moduleIds: ['linear-algebra', 'calculus-optimization', 'probability-statistics'],
+    },
+  ], []);
+
+  // 1. Identify active domain based on currentModuleId or current chapter pathname
+  const detectActiveDomain = (): string => {
+    // Check by currentModuleId first
+    if (currentModuleId) {
+      const match = domainList.find((d) => d.moduleIds.includes(currentModuleId));
+      if (match) return match.id;
     }
-    if (['classical-ml', 'deep-learning', 'nlp-llms', 'computer-vision', 'reinforcement-learning'].includes(modId || '')) {
-      return 'ai-core';
+
+    // Check by active chapter in pathname
+    for (const d of domainList) {
+      const hasChapter = AI_CURRICULUM
+        .filter((m) => d.moduleIds.includes(m.id))
+        .some((m) => m.chapters.some((ch) => pathname === `/book/${ch.slug}`));
+      if (hasChapter) return d.id;
     }
+
     return 'cs-research';
   };
 
-  const [activeTab, setActiveTab] = useState<'cs-research' | 'ai-core' | 'math'>(() => 
-    getDomainFromModule(currentModuleId)
-  );
+  const [activeDomainId, setActiveDomainId] = useState<string>(detectActiveDomain);
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // Sync tab if currentModuleId changes
+  // Sync active domain whenever currentModuleId or pathname changes
   useEffect(() => {
-    if (currentModuleId) {
-      setActiveTab(getDomainFromModule(currentModuleId));
-    }
-  }, [currentModuleId]);
+    setActiveDomainId(detectActiveDomain());
+  }, [currentModuleId, pathname]);
 
-  // Filter modules according to active tab
-  const getTabModules = (): Module[] => {
-    if (activeTab === 'cs-research') return AI_CURRICULUM.slice(0, 6);
-    if (activeTab === 'ai-core') return AI_CURRICULUM.slice(6, 11);
-    return AI_CURRICULUM.slice(11);
-  };
+  const currentDomain = domainList.find((d) => d.id === activeDomainId) || domainList[0];
 
-  const modules = getTabModules();
-  const totalChapters = modules.reduce((acc, m) => acc + m.chapters.length, 0);
+  // Get modules strictly belonging to the active domain
+  const domainModules: Module[] = useMemo(() => {
+    return AI_CURRICULUM.filter((m) => currentDomain.moduleIds.includes(m.id));
+  }, [currentDomain]);
 
-  // 2. Collapsible accordion state for each module
-  // By default, open the current module and any module that contains the active chapter
+  const totalChapters = domainModules.reduce((acc, m) => acc + m.chapters.length, 0);
+
+  // 2. Collapsible state for modules (if domain has multiple modules)
   const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {};
-    AI_CURRICULUM.forEach((mod) => {
-      const hasActiveChapter = mod.chapters.some((ch) => pathname === `/book/${ch.slug}`);
-      initial[mod.id] = hasActiveChapter || mod.id === currentModuleId;
+    domainModules.forEach((mod) => {
+      initial[mod.id] = true; // Default expanded within domain
     });
-    // If none are open in active tab, expand the first module
-    if (!Object.values(initial).some(Boolean) && modules.length > 0) {
-      initial[modules[0].id] = true;
-    }
     return initial;
   });
 
-  // Ensure active module is always expanded when pathname changes
   useEffect(() => {
-    AI_CURRICULUM.forEach((mod) => {
-      const hasActiveChapter = mod.chapters.some((ch) => pathname === `/book/${ch.slug}`);
-      if (hasActiveChapter) {
-        setExpandedModules((prev) => ({ ...prev, [mod.id]: true }));
-      }
+    const updated: Record<string, boolean> = {};
+    domainModules.forEach((mod) => {
+      updated[mod.id] = true;
     });
-  }, [pathname]);
+    setExpandedModules(updated);
+  }, [activeDomainId]);
 
   const toggleModule = (modId: string) => {
     setExpandedModules((prev) => ({
@@ -97,166 +167,157 @@ export default function BookSidebar({
     }));
   };
 
-  const tabInfo = {
-    'cs-research': {
-      title: 'CS Research Methodology',
-      badge: 'Scientific Method',
-      iconText: 'CS',
-      completedText: `${totalChapters} Chapters • 6 Topics`
-    },
-    'ai-core': {
-      title: 'AI & Deep Learning Core',
-      badge: 'Neural Architectures',
-      iconText: 'AI',
-      completedText: `${totalChapters} Chapters • 5 Topics`
-    },
-    'math': {
-      title: 'Mathematical Foundations',
-      badge: 'Rigorous Math',
-      iconText: '∑',
-      completedText: `${totalChapters} Chapters • 3 Topics`
-    }
-  };
-
   return (
-    <aside className="w-full flex flex-col space-y-4 text-slate-800 dark:text-slate-200 select-none">
+    <aside className="w-full flex flex-col space-y-3.5 text-slate-800 dark:text-slate-200 select-none">
       
-      {/* 1. DOMAIN SWITCHER TABS (3 Core Pillars) */}
-      <div className="space-y-1">
-        <div className="flex items-center justify-between px-1 mb-1.5">
+      {/* 1. SEPARATED DOMAIN SELECTOR DROPDOWN */}
+      <div className="relative space-y-1">
+        <div className="flex items-center justify-between px-1 mb-1">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-            Curriculum Domain
+            Active Domain Scope
           </span>
           <Link
             href="/"
             className="text-[10px] font-mono text-sky-600 dark:text-cyan-400 hover:underline"
           >
-            All 7 Domains →
+            All Portals →
           </Link>
         </div>
 
-        <div className="grid grid-cols-3 gap-1 rounded-xl bg-slate-100 dark:bg-slate-900 p-1 border border-slate-200/80 dark:border-slate-800">
-          <button
-            onClick={() => setActiveTab('cs-research')}
-            className={`flex items-center justify-center gap-1 py-1.5 px-1.5 rounded-lg text-xs font-bold transition-all ${
-              activeTab === 'cs-research'
-                ? 'bg-white dark:bg-slate-800 text-sky-600 dark:text-cyan-400 shadow-2xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
-            }`}
-          >
-            <Zap className="h-3 w-3 shrink-0" />
-            <span className="truncate">Research</span>
-          </button>
+        {/* Selected Domain Dropdown Button */}
+        <button
+          onClick={() => setDropdownOpen(!dropdownOpen)}
+          className="w-full flex items-center justify-between rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-2.5 shadow-2xs hover:border-slate-300 dark:hover:border-slate-700 transition-colors text-left"
+        >
+          <div className="flex items-center gap-2.5 min-w-0 pr-1">
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-slate-100 dark:bg-slate-800 border border-slate-200/80 dark:border-slate-700">
+              {currentDomain.icon}
+            </span>
+            <div className="min-w-0">
+              <span className="text-[9px] font-mono font-bold uppercase text-sky-600 dark:text-cyan-400 block leading-tight">
+                {currentDomain.badge}
+              </span>
+              <h3 className="text-xs font-bold text-slate-900 dark:text-white truncate leading-tight">
+                {currentDomain.name}
+              </h3>
+            </div>
+          </div>
+          <ChevronDown className={`h-4 w-4 text-slate-400 shrink-0 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+        </button>
 
-          <button
-            onClick={() => setActiveTab('ai-core')}
-            className={`flex items-center justify-center gap-1 py-1.5 px-1.5 rounded-lg text-xs font-bold transition-all ${
-              activeTab === 'ai-core'
-                ? 'bg-white dark:bg-slate-800 text-violet-600 dark:text-violet-400 shadow-2xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
-            }`}
-          >
-            <Cpu className="h-3 w-3 shrink-0" />
-            <span className="truncate">AI Core</span>
-          </button>
+        {/* Dropdown Menu Options */}
+        {dropdownOpen && (
+          <div className="absolute top-full left-0 right-0 z-50 mt-1 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-1.5 shadow-xl space-y-1">
+            {domainList.map((d) => {
+              const isSelected = d.id === activeDomainId;
+              const dModules = AI_CURRICULUM.filter((m) => d.moduleIds.includes(m.id));
+              const chCount = dModules.reduce((acc, m) => acc + m.chapters.length, 0);
 
-          <button
-            onClick={() => setActiveTab('math')}
-            className={`flex items-center justify-center gap-1 py-1.5 px-1.5 rounded-lg text-xs font-bold transition-all ${
-              activeTab === 'math'
-                ? 'bg-white dark:bg-slate-800 text-blue-600 dark:text-blue-400 shadow-2xs'
-                : 'text-slate-600 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white'
-            }`}
-          >
-            <Sigma className="h-3 w-3 shrink-0" />
-            <span className="truncate">Math</span>
-          </button>
-        </div>
+              return (
+                <button
+                  key={d.id}
+                  onClick={() => {
+                    setActiveDomainId(d.id);
+                    setDropdownOpen(false);
+                  }}
+                  className={`w-full flex items-center justify-between p-2 rounded-lg text-xs transition-colors text-left ${
+                    isSelected
+                      ? 'bg-sky-50 dark:bg-sky-950/50 text-sky-700 dark:text-cyan-300 font-bold'
+                      : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900'
+                  }`}
+                >
+                  <div className="flex items-center gap-2 min-w-0">
+                    <span className="shrink-0">{d.icon}</span>
+                    <span className="truncate">{d.name}</span>
+                  </div>
+                  <span className="text-[10px] font-mono text-slate-400 shrink-0 ml-1">
+                    {chCount} ch
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
 
-      {/* 2. ACTIVE DOMAIN SUMMARY CARD */}
-      <div className="rounded-xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900/60 p-3 shadow-2xs space-y-1.5">
-        <div className="flex items-center justify-between">
-          <span className="text-[10px] font-mono font-bold uppercase text-sky-600 dark:text-cyan-400">
-            {tabInfo[activeTab].badge}
+      {/* 2. ACTIVE DOMAIN HEADER & CHAPTER SUMMARY */}
+      <div className="rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/40 p-3 shadow-2xs flex items-center justify-between">
+        <div>
+          <span className="text-[10px] font-mono font-bold uppercase text-slate-400 block">
+            Domain Focus
           </span>
-          <span className="text-[10px] font-mono text-slate-400">
-            {tabInfo[activeTab].completedText}
-          </span>
+          <p className="text-xs font-bold text-slate-900 dark:text-white">
+            {domainModules.length} {domainModules.length === 1 ? 'Topic' : 'Topics'} • {totalChapters} Chapters
+          </p>
         </div>
-        <h4 className="text-xs font-black text-slate-950 dark:text-white tracking-tight leading-snug">
-          {tabInfo[activeTab].title}
-        </h4>
+        <Link
+          href={`/topic/${currentDomain.id}`}
+          className="text-[11px] font-mono font-bold text-sky-600 dark:text-cyan-400 hover:underline"
+        >
+          Overview →
+        </Link>
       </div>
 
       {/* 3. QUICK SEARCH BUTTON */}
       <button
         onClick={onOpenSearch}
-        className="flex w-full items-center justify-between rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-900/60 px-3 py-2 text-xs text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+        className="flex w-full items-center justify-between rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900/60 px-3 py-2 text-xs text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors"
       >
         <div className="flex items-center gap-2">
           <Search className="h-3.5 w-3.5 text-slate-400" />
-          <span>Quick search (⌘K)...</span>
+          <span>Search this domain...</span>
         </div>
-        <kbd className="rounded bg-slate-200 dark:bg-slate-800 px-1.5 py-0.5 text-[9px] font-mono text-slate-500">
+        <kbd className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[9px] font-mono text-slate-500">
           ⌘K
         </kbd>
       </button>
 
-      {/* 4. LOGICAL ACCORDION LIST OF TOPICS & CHAPTERS */}
-      <div className="space-y-2 pt-1 pb-10">
-        {modules.map((module) => {
-          const isExpanded = !!expandedModules[module.id];
-          const hasActiveChild = module.chapters.some((ch) => pathname === `/book/${ch.slug}`);
+      {/* 4. ISOLATED TOPICS & CHAPTERS LIST (Strictly for this domain only!) */}
+      <div className="space-y-3 pt-1 pb-10">
+        {domainModules.map((module) => {
+          const isExpanded = expandedModules[module.id] !== false;
+          const hasMultipleModules = domainModules.length > 1;
 
           return (
             <div
               key={module.id}
               className={`rounded-xl border transition-all ${
-                hasActiveChild
-                  ? 'border-sky-300 dark:border-sky-800/80 bg-sky-50/20 dark:bg-sky-950/10'
-                  : 'border-slate-200/70 dark:border-slate-800/70 bg-white/40 dark:bg-slate-900/30'
+                hasMultipleModules
+                  ? 'border-slate-200/80 dark:border-slate-800 bg-white/40 dark:bg-slate-900/30'
+                  : 'border-transparent bg-transparent'
               }`}
             >
-              {/* Module Header (Clickable Accordion Trigger) */}
-              <button
-                onClick={() => toggleModule(module.id)}
-                className="w-full flex items-center justify-between p-2.5 text-left hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-xl transition-colors"
-              >
-                <div className="flex items-center gap-2 min-w-0 pr-2">
-                  <span
-                    className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-md text-[10px] font-mono font-black ${
-                      hasActiveChild
-                        ? 'bg-sky-600 text-white'
-                        : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
-                    }`}
-                  >
-                    T{module.number}
-                  </span>
-                  <div className="min-w-0">
-                    <p className={`text-xs font-bold truncate leading-tight ${
-                      hasActiveChild ? 'text-sky-700 dark:text-cyan-300' : 'text-slate-900 dark:text-slate-200'
-                    }`}>
+              {/* Module Header (only if multiple modules in domain) */}
+              {hasMultipleModules && (
+                <button
+                  onClick={() => toggleModule(module.id)}
+                  className="w-full flex items-center justify-between p-2.5 text-left hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded-xl transition-colors"
+                >
+                  <div className="flex items-center gap-2 min-w-0 pr-2">
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-md bg-slate-100 dark:bg-slate-800 font-mono text-[10px] font-bold text-slate-600 dark:text-slate-400">
+                      T{module.number}
+                    </span>
+                    <p className="text-xs font-bold text-slate-900 dark:text-slate-200 truncate leading-tight">
                       {module.title}
                     </p>
                   </div>
-                </div>
 
-                <div className="flex items-center gap-1.5 shrink-0">
-                  <span className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[9px] font-mono text-slate-500 dark:text-slate-400">
-                    {module.chapters.length}
-                  </span>
-                  {isExpanded ? (
-                    <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
-                  ) : (
-                    <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
-                  )}
-                </div>
-              </button>
+                  <div className="flex items-center gap-1.5 shrink-0">
+                    <span className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[9px] font-mono text-slate-400">
+                      {module.chapters.length}
+                    </span>
+                    {isExpanded ? (
+                      <ChevronDown className="h-3.5 w-3.5 text-slate-400" />
+                    ) : (
+                      <ChevronRight className="h-3.5 w-3.5 text-slate-400" />
+                    )}
+                  </div>
+                </button>
+              )}
 
-              {/* Collapsible Chapters Sub-List */}
+              {/* Chapters Sub-List */}
               {isExpanded && (
-                <div className="px-2 pb-2.5 pt-1 space-y-1 border-t border-slate-100 dark:border-slate-800/60">
+                <div className={`space-y-1.5 ${hasMultipleModules ? 'px-2 pb-2.5 pt-1 border-t border-slate-100 dark:border-slate-800/60' : ''}`}>
                   {module.chapters.map((chapter, cIdx) => {
                     const isActive = pathname === `/book/${chapter.slug}`;
 
@@ -265,16 +326,16 @@ export default function BookSidebar({
                         key={chapter.id}
                         href={`/book/${chapter.slug}`}
                         onClick={onCloseMobile}
-                        className={`group relative flex items-center justify-between rounded-lg px-2.5 py-2 text-xs transition-all ${
+                        className={`group relative flex items-center justify-between rounded-xl px-3 py-2.5 text-xs transition-all ${
                           isActive
-                            ? 'bg-sky-500 dark:bg-sky-600 text-white font-bold shadow-xs'
-                            : 'text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800/60 hover:text-slate-950 dark:hover:text-white'
+                            ? 'bg-sky-600 dark:bg-cyan-600 text-white font-bold shadow-xs'
+                            : 'border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/60 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 hover:text-slate-950 dark:hover:text-white'
                         }`}
                       >
                         <div className="flex items-center gap-2 min-w-0 pr-2">
                           <span
                             className={`font-mono text-[10px] font-bold shrink-0 ${
-                              isActive ? 'text-sky-100' : 'text-slate-400 dark:text-slate-500'
+                              isActive ? 'text-sky-100' : 'text-slate-400'
                             }`}
                           >
                             {module.number}.{cIdx + 1}
@@ -284,9 +345,9 @@ export default function BookSidebar({
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-1 shrink-0">
+                        <div className="flex items-center gap-1.5 shrink-0">
                           {chapter.badge && !isActive && (
-                            <span className="hidden sm:inline rounded bg-slate-100 dark:bg-slate-800 px-1 py-0.2 text-[8px] font-mono text-slate-400">
+                            <span className="hidden sm:inline rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[8px] font-mono text-slate-500">
                               {chapter.badge}
                             </span>
                           )}
