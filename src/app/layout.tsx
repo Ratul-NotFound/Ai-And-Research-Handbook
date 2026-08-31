@@ -22,25 +22,6 @@ export const viewport: Viewport = {
   viewportFit: 'cover',
 };
 
-const themeScript = `
-  (function() {
-    try {
-      var saved = localStorage.getItem('ai_book_theme');
-      if (saved === 'dark') {
-        document.documentElement.classList.add('dark');
-        document.documentElement.classList.remove('light');
-        document.documentElement.style.colorScheme = 'dark';
-      } else {
-        document.documentElement.classList.remove('dark');
-        document.documentElement.classList.add('light');
-        document.documentElement.style.colorScheme = 'light';
-      }
-    } catch(e) {
-      document.documentElement.classList.add('light');
-    }
-  })();
-`;
-
 export default function RootLayout({
   children,
 }: {
@@ -49,7 +30,11 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="light">
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <link
+          rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
+          crossOrigin="anonymous"
+        />
       </head>
       <body
         suppressHydrationWarning
