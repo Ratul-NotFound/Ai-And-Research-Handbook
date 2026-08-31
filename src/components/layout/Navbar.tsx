@@ -59,7 +59,11 @@ export default function Navbar({ onOpenSearch, onToggleSidebar }: NavbarProps) {
           <button
             onClick={() => {
               if (typeof window !== 'undefined') {
-                window.dispatchEvent(new CustomEvent('open-pwa-install'));
+                if (window.triggerPwaInstall) {
+                  window.triggerPwaInstall();
+                } else {
+                  window.dispatchEvent(new CustomEvent('open-pwa-install'));
+                }
               }
             }}
             className="hidden md:inline-flex items-center gap-1.5 rounded-lg border border-indigo-200 dark:border-indigo-900/60 bg-indigo-50 dark:bg-indigo-950/50 px-2.5 py-1.5 text-xs font-semibold text-indigo-700 dark:text-indigo-300 transition-all hover:bg-indigo-100 dark:hover:bg-indigo-900/80 cursor-pointer shadow-2xs"

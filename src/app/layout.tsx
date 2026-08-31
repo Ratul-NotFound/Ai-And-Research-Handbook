@@ -7,6 +7,14 @@ export const metadata: Metadata = {
   title: 'AI Research Living Book | First-Principles AI Handbook',
   description: 'Master AI, Machine Learning, Deep Learning, Computer Vision, NLP & LLMs from mathematical intuition to ArXiv research implementation.',
   manifest: '/manifest.json',
+  icons: {
+    icon: [
+      { url: '/icon.svg', type: 'image/svg+xml' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+    apple: '/icon.svg',
+    shortcut: '/icon.svg',
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -15,7 +23,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#ffffff',
+  themeColor: '#4f46e5',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
@@ -30,6 +38,9 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning className="light">
       <head>
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+        <link rel="alternate icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/icon.svg" />
         <link
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"

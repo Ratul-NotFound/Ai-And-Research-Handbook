@@ -7,6 +7,7 @@ import MobileDrawer from '@/components/layout/MobileDrawer';
 import Footer from '@/components/layout/Footer';
 import CommandPalette from '@/components/search/CommandPalette';
 import AuthenticBook, { AuthenticBookProps } from '@/components/home/AuthenticBook';
+import TextStrokeReveal from '@/components/home/TextStrokeReveal';
 import { 
   Bot, 
   Sigma, 
@@ -18,11 +19,7 @@ import {
   Compass, 
   Sparkles,
   BookOpen,
-  Route,
-  Zap,
-  CheckCircle2,
-  Layers,
-  ArrowRight
+  ChevronDown
 } from 'lucide-react';
 import { 
   ModernAiCardBackdrop, 
@@ -243,76 +240,62 @@ export default function HomePage() {
       <CommandPalette isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
 
       {/* Main Container */}
-      <main suppressHydrationWarning className="mx-auto flex-1 w-full max-w-7xl px-4 sm:px-6 lg:px-8 py-8 sm:py-12 space-y-16">
+      <main suppressHydrationWarning className="mx-auto flex-1 w-full max-w-7xl px-4 sm:px-6 lg:px-8 space-y-16">
         
-        {/* HERO SECTION */}
-        <section suppressHydrationWarning className="text-center space-y-4 max-w-3xl mx-auto pt-2">
-          
-          <div suppressHydrationWarning className="inline-flex items-center gap-2 rounded-full border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-3.5 py-1 text-xs font-semibold shadow-2xs">
-            <Sparkles className="h-3.5 w-3.5 text-purple-600 dark:text-purple-400" />
-            <span className="font-mono text-[11px] uppercase tracking-wider text-slate-700 dark:text-slate-300">
-              Open-Access Library • 6 Hardbound Textbooks • 89 Chapters
-            </span>
-          </div>
+        {/* FULL-PAGE RESPONSIVE HERO SECTION */}
+        <section 
+          suppressHydrationWarning 
+          className="min-h-[68vh] sm:min-h-[78vh] flex flex-col items-center justify-center text-center space-y-6 max-w-4xl mx-auto py-8 sm:py-12"
+        >
+          {/* Main Hero Headline with Stroke-Draw Then Fill-Reveal Animation */}
+          <TextStrokeReveal text="First-Principles Artificial Intelligence & Research Handbook" />
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-slate-950 dark:text-white tracking-tight leading-tight">
-            The Living Artificial Intelligence & CS Research Handbook
-          </h1>
-
-          <p className="text-sm sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
-            A comprehensive digital library of first-principles AI textbooks. Engineered for researchers, software engineers, and graduate scholars with mathematical proofs, workflow decision trees, and interactive visualizers.
+          {/* Slogan Synced with Logo Cyan-Purple Colorway */}
+          <p className="text-base sm:text-xl lg:text-2xl font-black bg-gradient-to-r from-cyan-600 via-purple-600 to-cyan-500 dark:from-cyan-400 dark:via-purple-400 dark:to-cyan-300 bg-clip-text text-transparent tracking-tight max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-700 delay-300">
+            From Mathematical Foundations to Autonomous Agent Swarms.
           </p>
 
-          <div suppressHydrationWarning className="pt-1 flex items-center justify-center gap-3 flex-wrap">
+          {/* Subtitle */}
+          <p className="text-xs sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-700 delay-500">
+            A comprehensive, open-access digital library of 6 first-principles textbooks engineered for researchers, engineers, and scholars with mathematical proofs, derivation steps, and interactive sandboxes.
+          </p>
+
+          {/* Action CTAs */}
+          <div suppressHydrationWarning className="pt-2 flex items-center justify-center gap-3.5 flex-wrap">
             <button
               onClick={() => setSearchOpen(true)}
-              className="flex items-center gap-2 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-5 py-2.5 text-xs font-bold shadow-xs hover:bg-slate-800 dark:hover:bg-slate-100 transition-colors"
+              className="flex items-center gap-2 rounded-xl bg-slate-950 dark:bg-white text-white dark:text-slate-950 px-6 py-3 text-xs sm:text-sm font-bold shadow-md hover:bg-slate-800 dark:hover:bg-slate-100 transition-all hover:scale-105 cursor-pointer ring-1 ring-cyan-500/20"
             >
-              <Search className="h-4 w-4" />
+              <Search className="h-4 w-4 text-cyan-400 dark:text-cyan-600" />
               <span>Search Library (⌘K)</span>
             </button>
 
             <Link
               href="/cheatsheet"
-              className="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-5 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 transition-colors shadow-2xs"
+              className="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-3 text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 hover:border-cyan-400 dark:hover:border-cyan-500 transition-all hover:scale-105 shadow-2xs"
             >
               <Compass className="h-4 w-4 text-purple-600 dark:text-purple-400" />
               <span>Master Cheatsheet</span>
             </Link>
           </div>
-        </section>
 
-        {/* CURRICULUM HIGHLIGHTS STRIP */}
-        <section suppressHydrationWarning className="grid grid-cols-2 md:grid-cols-4 gap-3.5 max-w-5xl mx-auto">
-          <div className="rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/60 p-3.5 shadow-2xs">
-            <span className="font-mono text-[10px] font-bold uppercase text-purple-600 dark:text-purple-400 block mb-1">Vol I • Frontier AI</span>
-            <span className="text-xs font-bold text-slate-900 dark:text-white block">LLMs & Agent Swarms</span>
-            <span className="text-[11px] text-slate-500 dark:text-slate-400">o1, MCP, LangGraph</span>
-          </div>
-          <div className="rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/60 p-3.5 shadow-2xs">
-            <span className="font-mono text-[10px] font-bold uppercase text-blue-600 dark:text-blue-400 block mb-1">Vol II • Mathematics</span>
-            <span className="text-xs font-bold text-slate-900 dark:text-white block">Vectors & Gradients</span>
-            <span className="text-[11px] text-slate-500 dark:text-slate-400">SVD, Hessians, Entropy</span>
-          </div>
-          <div className="rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/60 p-3.5 shadow-2xs">
-            <span className="font-mono text-[10px] font-bold uppercase text-emerald-600 dark:text-emerald-400 block mb-1">Vol IV • Machine Learning</span>
-            <span className="text-xs font-bold text-slate-900 dark:text-white block">Statistical Learning</span>
-            <span className="text-[11px] text-slate-500 dark:text-slate-400">XGBoost, SVM, Optuna</span>
-          </div>
-          <div className="rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/60 p-3.5 shadow-2xs">
-            <span className="font-mono text-[10px] font-bold uppercase text-rose-600 dark:text-rose-400 block mb-1">Vol V • NLP & LLMs</span>
-            <span className="text-xs font-bold text-slate-900 dark:text-white block">Transformers & LoRA</span>
-            <span className="text-[11px] text-slate-500 dark:text-slate-400">Attention, DPO, RAG</span>
-          </div>
+          {/* Scroll Down to Bookshelf */}
+          <a
+            href="#curriculum"
+            className="pt-6 inline-flex flex-col items-center gap-1 text-xs font-mono font-semibold text-slate-400 dark:text-slate-500 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors group cursor-pointer"
+          >
+            <span>Explore 6 Textbook Volumes</span>
+            <ChevronDown className="h-4 w-4 text-cyan-500 animate-bounce group-hover:translate-y-1 transition-transform" />
+          </a>
         </section>
 
         {/* 6 HARDBOUND BOOKS (Digital Shelf Grid with Filter Tabs) */}
-        <section suppressHydrationWarning className="space-y-6">
+        <section id="curriculum" suppressHydrationWarning className="space-y-6 pt-4">
           
           {/* Header & Filter Controls */}
           <div suppressHydrationWarning className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-3">
             <div>
-              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400 block">
+              <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 block">
                 Curriculum Bookshelf
               </span>
               <h2 className="text-xl font-bold text-slate-950 dark:text-white tracking-tight">
@@ -354,119 +337,6 @@ export default function HomePage() {
             {filteredBooks.map((book) => (
               <AuthenticBook key={book.id} {...book} />
             ))}
-          </div>
-        </section>
-
-        {/* STRUCTURED RECOMMENDED LEARNING PATHS */}
-        <section suppressHydrationWarning className="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-800">
-          <div>
-            <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400 block">
-              Curated Study Sequences
-            </span>
-            <h2 className="text-xl font-bold text-slate-950 dark:text-white tracking-tight">
-              Recommended Learning Tracks
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {/* Track 1 */}
-            <div className="rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/40 p-4 space-y-2.5 shadow-2xs">
-              <div className="flex items-center gap-2">
-                <Route className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white">The Autonomous Agent Engineer</h3>
-              </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                For engineers building production agents with MCP, function calling, tool use, and multi-agent coordination.
-              </p>
-              <div className="pt-1 flex items-center gap-1.5 text-[11px] font-mono font-semibold text-purple-600 dark:text-purple-400">
-                <span>Vol 01: Modern AI</span>
-                <span>→</span>
-                <span>Vol 05: NLP & LLMs</span>
-              </div>
-            </div>
-
-            {/* Track 2 */}
-            <div className="rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/40 p-4 space-y-2.5 shadow-2xs">
-              <div className="flex items-center gap-2">
-                <GraduationCap className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white">The AI Research Scientist</h3>
-              </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                For researchers formulating scientific hypotheses, rigorous literature snowballing, and proofs.
-              </p>
-              <div className="pt-1 flex items-center gap-1.5 text-[11px] font-mono font-semibold text-blue-600 dark:text-blue-400">
-                <span>Vol 02: Math</span>
-                <span>→</span>
-                <span>Vol 03: CS Research</span>
-                <span>→</span>
-                <span>Vol 06: DL</span>
-              </div>
-            </div>
-
-            {/* Track 3 */}
-            <div className="rounded-xl border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/40 p-4 space-y-2.5 shadow-2xs">
-              <div className="flex items-center gap-2">
-                <Boxes className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-                <h3 className="text-sm font-bold text-slate-900 dark:text-white">The Applied ML Practitioner</h3>
-              </div>
-              <p className="text-xs text-slate-500 dark:text-slate-400 leading-relaxed">
-                From data preprocessing, regression, and gradient boosting to neural networks and hyperparameter tuning.
-              </p>
-              <div className="pt-1 flex items-center gap-1.5 text-[11px] font-mono font-semibold text-emerald-600 dark:text-emerald-400">
-                <span>Vol 02: Math</span>
-                <span>→</span>
-                <span>Vol 04: Classical ML</span>
-                <span>→</span>
-                <span>Vol 06: DL</span>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* AUTHOR & PLATFORM ARCHITECT CONTRIBUTION SPOTLIGHT */}
-        <section suppressHydrationWarning className="rounded-2xl border border-slate-200/80 dark:border-slate-800/80 bg-gradient-to-br from-indigo-50/50 via-white to-purple-50/50 dark:from-slate-900/80 dark:via-[#0c101d] dark:to-indigo-950/40 p-6 sm:p-8 shadow-xs">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            
-            <div className="flex items-center gap-4">
-              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-indigo-600 to-purple-600 text-white font-mono text-xl font-black shadow-md shadow-indigo-500/20">
-                R
-              </div>
-              <div className="space-y-1">
-                <div className="flex items-center gap-2 flex-wrap">
-                  <h3 className="text-lg font-bold text-slate-950 dark:text-white">
-                    Mahmud Hasan Ratul
-                  </h3>
-                  <span className="font-mono text-[10px] font-bold uppercase tracking-wider bg-indigo-100 text-indigo-800 dark:bg-indigo-950/80 dark:text-indigo-300 dark:border dark:border-indigo-800 px-2 py-0.5 rounded-full">
-                    Author & Platform Architect
-                  </span>
-                </div>
-                <p className="text-xs text-slate-600 dark:text-slate-400 max-w-xl leading-relaxed">
-                  Full-Stack Developer & AI Automation Engineer specializing in High-Performance Web Systems, Autonomous Agent Workflows (MCP, LangGraph), and Scalable Cloud Architectures.
-                </p>
-              </div>
-            </div>
-
-            <div className="flex items-center gap-3 shrink-0">
-              <a
-                href="https://ratul-dev.vercel.app/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-950 px-5 py-2.5 text-xs font-bold shadow-xs hover:bg-indigo-600 dark:hover:bg-indigo-100 transition-all hover:scale-105"
-              >
-                <span>View Creator Portfolio</span>
-                <ArrowRight className="h-3.5 w-3.5" />
-              </a>
-
-              <a
-                href="https://github.com/Ratul-NotFound"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-4 py-2.5 text-xs font-bold text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 transition-colors shadow-2xs"
-              >
-                <span>GitHub</span>
-              </a>
-            </div>
-
           </div>
         </section>
 
