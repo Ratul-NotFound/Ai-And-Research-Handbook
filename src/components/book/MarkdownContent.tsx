@@ -262,7 +262,47 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       continue;
     }
 
-    // 2. TABLE — collect consecutive lines that start and end with |
+    // 2. FENCED CODE BLOCKS (```lang ... ```)
+    if (trimmed.startsWith('```')) {
+      const lang = trimmed.slice(3).trim() || 'plaintext';
+      const codeLines: string[] = [];
+      i++;
+      while (i < lines.length && !lines[i].trim().startsWith('```')) {
+        codeLines.push(lines[i]);
+        i++;
+      }
+      if (i < lines.length && lines[i].trim().startsWith('```')) {
+        i++; // skip closing ```
+      }
+      const rawCode = codeLines.join('\n');
+      elements.push(
+        <div
+          key={key++}
+          className="my-4 overflow-hidden rounded-xl border border-slate-200/80 dark:border-slate-800 bg-[#0d1117] text-slate-100 shadow-md"
+        >
+          {lang && lang !== 'plaintext' && (
+            <div className="flex items-center justify-between border-b border-slate-800 bg-slate-950/80 px-3.5 py-1.5 text-[10px] font-mono text-slate-400">
+              <span className="uppercase font-bold text-sky-400">{lang}</span>
+            </div>
+          )}
+          <pre className="overflow-x-auto p-4 font-mono text-xs leading-relaxed text-slate-200">
+            <code>{rawCode}</code>
+          </pre>
+        </div>
+      );
+      continue;
+    }
+
+    // 3. HORIZONTAL RULE (--- or ***)
+    if (trimmed === '---' || trimmed === '***' || trimmed === '___') {
+      elements.push(
+        <hr key={key++} className="my-6 border-slate-200 dark:border-slate-800" />
+      );
+      i++;
+      continue;
+    }
+
+    // 4. TABLE — collect consecutive lines that start and end with |
     if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
       const tableLines: string[] = [];
       while (
@@ -277,7 +317,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       continue;
     }
 
-    // 3. H2 (## heading)
+    // 5. H2 (## heading)
     if (trimmed.startsWith('## ')) {
       elements.push(
         <h2
@@ -291,7 +331,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       continue;
     }
 
-    // 4. H3 (### heading)
+    // 6. H3 (### heading)
     if (trimmed.startsWith('### ')) {
       elements.push(
         <h3
@@ -306,7 +346,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       continue;
     }
 
-    // 5. H4 (#### heading)
+    // 7. H4 (#### heading)
     if (trimmed.startsWith('#### ')) {
       elements.push(
         <h4
@@ -320,7 +360,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       continue;
     }
 
-    // 6. BLOCKQUOTE (> text)
+    // 8. BLOCKQUOTE (> text)
     if (trimmed.startsWith('> ')) {
       const quoteLines: string[] = [];
       while (i < lines.length && lines[i].trim().startsWith('>')) {
@@ -342,7 +382,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       continue;
     }
 
-    // 7. NUMBERED LIST
+    // 9. NUMBERED LIST
     if (/^\d+\.\s/.test(trimmed)) {
       const listItems: string[] = [];
       while (i < lines.length && /^\s*\d+\.\s/.test(lines[i])) {
@@ -369,7 +409,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       continue;
     }
 
-    // 8. CHECKBOX LIST (- [x] or - [ ])
+    // 10. CHECKBOX LIST (- [x] or - [ ])
     if (/^-\s\[.\]/.test(trimmed)) {
       const checkItems: { checked: boolean; text: string }[] = [];
       while (i < lines.length && /^\s*-\s\[.\]/.test(lines[i])) {
@@ -404,7 +444,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       continue;
     }
 
-    // 9. BULLET LIST (- item or * item)
+    // 11. BULLET LIST (- item or * item)
     if (/^[-*•]\s/.test(trimmed)) {
       const listItems: string[] = [];
       while (i < lines.length && /^\s*[-*•]\s/.test(lines[i])) {
@@ -429,7 +469,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       continue;
     }
 
-    // 10. PARAGRAPH — collect consecutive non-special lines
+    // 12. PARAGRAPH — collect consecutive non-special lines
     const paraLines: string[] = [];
     while (
       i < lines.length &&
@@ -438,6 +478,10 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       !lines[i].trim().startsWith('#') &&
       !lines[i].trim().startsWith('>') &&
       !lines[i].trim().startsWith('$$') &&
+      !lines[i].trim().startsWith('```') &&
+      lines[i].trim() !== '---' &&
+      lines[i].trim() !== '***' &&
+      lines[i].trim() !== '___' &&
       !/^\s*\d+\.\s/.test(lines[i]) &&
       !/^\s*[-*•]\s/.test(lines[i]) &&
       !/^\s*-\s\[.\]/.test(lines[i])

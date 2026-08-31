@@ -51,11 +51,12 @@ export default function HomePage() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
-  // 6 Flagship Curriculum Portals (Unified, Clean, Modern Architecture)
+  // 6 Flagship Curriculum Portals in exact requested sequence:
+  // 1. Modern AI -> 2. Math -> 3. Research Methodology -> 4. ML -> 5. NLP -> 6. Deep Learning
   const masterPaths: MasterPath[] = [
     {
       id: 'modern-ai-agents',
-      title: 'Modern AI & Autonomous Agents (Full Book)',
+      title: 'Modern AI & Autonomous Smart Systems',
       badge: '15 In-Depth Chapters',
       topicCount: 1,
       chapterCount: 15,
@@ -67,12 +68,78 @@ export default function HomePage() {
       badgeClass: 'bg-purple-50 dark:bg-purple-950/80 text-purple-700 dark:text-purple-300 border-purple-200 dark:border-purple-800',
       primaryButton: 'bg-purple-600 hover:bg-purple-700 text-white shadow-xs hover:shadow-md hover:shadow-purple-500/20',
       pathUrl: '/topic/modern-ai-agents',
-      startChapterUrl: '/book/modern-ai-paradigm-shift-scaling-laws',
+      startChapterUrl: '/book/how-modern-llms-work-internals-tokens-kvcache',
       highlights: [
-        'LLM Internals, Chinchilla Scaling & KV-Cache PagedAttention',
-        'Reasoning Models (o1/o3), Test-Time Compute & Latent MCTS',
-        'Autonomous Agents, ReAct Loops & Model Context Protocol (MCP)',
-        'Multi-Agent Swarms, Advanced RAG, GraphRAG & DPO Alignment',
+        'LLM Internals, Tokens, Generation Loops & KV-Cache',
+        'Reasoning Models (o1/o3/R1) & Test-Time Thinking',
+        'Tool Calling, Function Calling & Model Context Protocol (MCP)',
+        'Autonomous Agents, Swarms (LangGraph) & GraphRAG',
+      ]
+    },
+    {
+      id: 'mathematics',
+      title: 'Mathematical Foundations for AI',
+      badge: 'Rigorous Math',
+      topicCount: 3,
+      chapterCount: 11,
+      description: 'High-dimensional vector spaces, SVD low-rank matrix approximations, Vector-Jacobian Products (VJPs), non-convex optimization loss landscapes, Maximum Likelihood, and Information Theory.',
+      icon: <Sigma className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />,
+      iconBg: 'bg-indigo-50 dark:bg-indigo-950/80 border-indigo-200/80 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400',
+      cardGradient: 'from-indigo-500/[0.05] via-indigo-500/[0.01] to-transparent dark:from-indigo-500/[0.08] dark:via-transparent dark:to-transparent',
+      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-500/80 hover:shadow-xl hover:shadow-indigo-500/[0.06]',
+      badgeClass: 'bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800',
+      primaryButton: 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs hover:shadow-md hover:shadow-indigo-500/20',
+      pathUrl: '/topic/mathematics',
+      startChapterUrl: '/book/vector-spaces-matrix-geometry',
+      highlights: [
+        'Vector Spaces, Basis Transformations & SVD Decompositions',
+        'Multivariate Gradients, Hessians & Taylor Approximations',
+        'Probability Distributions, Maximum Likelihood & Bayes Rule',
+        'Information Theory: Entropy, Cross-Entropy & KL Divergence',
+      ]
+    },
+    {
+      id: 'cs-research',
+      title: 'CS Research Methodology',
+      badge: 'Scientific Method',
+      topicCount: 6,
+      chapterCount: 18,
+      description: 'The complete end-to-end framework for formulation, snowballing literature search, data collection & DVC provenance, leak-free training protocols, and pre-submission conference verification.',
+      icon: <GraduationCap className="h-6 w-6 text-sky-600 dark:text-cyan-400" />,
+      iconBg: 'bg-sky-50 dark:bg-sky-950/80 border-sky-200/80 dark:border-sky-800 text-sky-600 dark:text-cyan-400',
+      cardGradient: 'from-sky-500/[0.05] via-sky-500/[0.01] to-transparent dark:from-sky-500/[0.08] dark:via-transparent dark:to-transparent',
+      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-sky-400 dark:hover:border-sky-500/80 hover:shadow-xl hover:shadow-sky-500/[0.06]',
+      badgeClass: 'bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-cyan-300 border-sky-200 dark:border-sky-800',
+      primaryButton: 'bg-sky-600 hover:bg-sky-700 text-white shadow-xs hover:shadow-md hover:shadow-sky-500/20',
+      pathUrl: '/topic/research-methodology',
+      startChapterUrl: '/book/what-is-research-methodology',
+      highlights: [
+        '5-Stage Systematic Snowballing Literature Search',
+        'Data Modality & 5-Step Leak-Free Preprocessing',
+        'Master Model Selection & 7-Step Training Protocol',
+        'Error Taxonomy (Bias, Variance, Leakage, Shift)',
+      ]
+    },
+    {
+      id: 'classical-ml',
+      title: 'Machine Learning (The Complete Book)',
+      badge: '15 In-Depth Chapters',
+      topicCount: 1,
+      chapterCount: 15,
+      description: 'From first-principles foundations, data preprocessing, and convex optimization to tree ensembles (XGBoost/LightGBM/CatBoost), SVM kernels, deep neural networks, CNNs, and Optuna tuning.',
+      icon: <Boxes className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />,
+      iconBg: 'bg-emerald-50 dark:bg-emerald-950/80 border-emerald-200/80 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400',
+      cardGradient: 'from-emerald-500/[0.05] via-emerald-500/[0.01] to-transparent dark:from-emerald-500/[0.08] dark:via-transparent dark:to-transparent',
+      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-emerald-400 dark:hover:border-emerald-500/80 hover:shadow-xl hover:shadow-emerald-500/[0.06]',
+      badgeClass: 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+      primaryButton: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs hover:shadow-md hover:shadow-emerald-500/20',
+      pathUrl: '/topic/classical-ml',
+      startChapterUrl: '/book/what-is-machine-learning-foundations',
+      highlights: [
+        'ML Paradigm Shift (Data + Answers = Rules) & 9-Phase Lifecycle',
+        'Data Preprocessing, Outliers, RobustScaler & Leak-Free Splits',
+        'Linear/Logistic Regression & House Pricing Worked Calculation',
+        'Random Forest & Gradient Boosting (XGBoost, LightGBM, CatBoost)',
       ]
     },
     {
@@ -117,72 +184,6 @@ export default function HomePage() {
         'Backpropagation Chain Rule & Adam/AdamW Optimizers',
         'CNNs, ResNet Skip Connections & YOLO/UNet Architectures',
         'Self-Attention, Transformers (BERT/GPT) & Diffusion SOTA',
-      ]
-    },
-    {
-      id: 'classical-ml',
-      title: 'Machine Learning (The Complete Book)',
-      badge: '15 In-Depth Chapters',
-      topicCount: 1,
-      chapterCount: 15,
-      description: 'From first-principles foundations, data preprocessing, and convex optimization to tree ensembles (XGBoost/LightGBM/CatBoost), SVM kernels, deep neural networks, CNNs, and Optuna tuning.',
-      icon: <Boxes className="h-6 w-6 text-emerald-600 dark:text-emerald-400" />,
-      iconBg: 'bg-emerald-50 dark:bg-emerald-950/80 border-emerald-200/80 dark:border-emerald-800 text-emerald-600 dark:text-emerald-400',
-      cardGradient: 'from-emerald-500/[0.05] via-emerald-500/[0.01] to-transparent dark:from-emerald-500/[0.08] dark:via-transparent dark:to-transparent',
-      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-emerald-400 dark:hover:border-emerald-500/80 hover:shadow-xl hover:shadow-emerald-500/[0.06]',
-      badgeClass: 'bg-emerald-50 dark:bg-emerald-950/80 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
-      primaryButton: 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-xs hover:shadow-md hover:shadow-emerald-500/20',
-      pathUrl: '/topic/classical-ml',
-      startChapterUrl: '/book/what-is-machine-learning-foundations',
-      highlights: [
-        'ML Paradigm Shift (Data + Answers = Rules) & 9-Phase Lifecycle',
-        'Data Preprocessing, Outliers, RobustScaler & Leak-Free Splits',
-        'Linear/Logistic Regression & House Pricing Worked Calculation',
-        'Random Forest & Gradient Boosting (XGBoost, LightGBM, CatBoost)',
-      ]
-    },
-    {
-      id: 'cs-research',
-      title: 'CS Research Methodology',
-      badge: 'Scientific Method',
-      topicCount: 6,
-      chapterCount: 18,
-      description: 'The complete end-to-end framework for formulation, snowballing literature search, data collection & DVC provenance, leak-free training protocols, and pre-submission conference verification.',
-      icon: <GraduationCap className="h-6 w-6 text-sky-600 dark:text-cyan-400" />,
-      iconBg: 'bg-sky-50 dark:bg-sky-950/80 border-sky-200/80 dark:border-sky-800 text-sky-600 dark:text-cyan-400',
-      cardGradient: 'from-sky-500/[0.05] via-sky-500/[0.01] to-transparent dark:from-sky-500/[0.08] dark:via-transparent dark:to-transparent',
-      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-sky-400 dark:hover:border-sky-500/80 hover:shadow-xl hover:shadow-sky-500/[0.06]',
-      badgeClass: 'bg-sky-50 dark:bg-sky-950/80 text-sky-700 dark:text-cyan-300 border-sky-200 dark:border-sky-800',
-      primaryButton: 'bg-sky-600 hover:bg-sky-700 text-white shadow-xs hover:shadow-md hover:shadow-sky-500/20',
-      pathUrl: '/topic/research-methodology',
-      startChapterUrl: '/book/what-is-research-methodology',
-      highlights: [
-        '5-Stage Systematic Snowballing Literature Search',
-        'Data Modality & 5-Step Leak-Free Preprocessing',
-        'Master Model Selection & 7-Step Training Protocol',
-        'Error Taxonomy (Bias, Variance, Leakage, Shift)',
-      ]
-    },
-    {
-      id: 'mathematics',
-      title: 'Mathematical Foundations for AI',
-      badge: 'Rigorous Math',
-      topicCount: 3,
-      chapterCount: 11,
-      description: 'High-dimensional vector spaces, SVD low-rank matrix approximations, Vector-Jacobian Products (VJPs), non-convex optimization loss landscapes, Maximum Likelihood, and Information Theory.',
-      icon: <Sigma className="h-6 w-6 text-indigo-600 dark:text-indigo-400" />,
-      iconBg: 'bg-indigo-50 dark:bg-indigo-950/80 border-indigo-200/80 dark:border-indigo-800 text-indigo-600 dark:text-indigo-400',
-      cardGradient: 'from-indigo-500/[0.05] via-indigo-500/[0.01] to-transparent dark:from-indigo-500/[0.08] dark:via-transparent dark:to-transparent',
-      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-indigo-400 dark:hover:border-indigo-500/80 hover:shadow-xl hover:shadow-indigo-500/[0.06]',
-      badgeClass: 'bg-indigo-50 dark:bg-indigo-950/80 text-indigo-700 dark:text-indigo-300 border-indigo-200 dark:border-indigo-800',
-      primaryButton: 'bg-indigo-600 hover:bg-indigo-700 text-white shadow-xs hover:shadow-md hover:shadow-indigo-500/20',
-      pathUrl: '/topic/mathematics',
-      startChapterUrl: '/book/vector-spaces-matrix-geometry',
-      highlights: [
-        'Vector Spaces, Basis Transformations & SVD Decompositions',
-        'Multivariate Gradients, Hessians & Taylor Approximations',
-        'Probability Distributions, Maximum Likelihood & Bayes Rule',
-        'Information Theory: Entropy, Cross-Entropy & KL Divergence',
       ]
     }
   ];

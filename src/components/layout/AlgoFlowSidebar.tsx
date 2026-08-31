@@ -45,20 +45,20 @@ export default function BookSidebar({
 
   const domainList: DomainDefinition[] = useMemo(() => [
     {
-      id: 'classical-ml',
-      name: 'Machine Learning (The Complete Book)',
-      shortName: 'Classical ML',
-      badge: '15 Chapters',
-      icon: <Boxes className="h-4 w-4 text-emerald-500" />,
-      moduleIds: ['classical-ml'],
-    },
-    {
       id: 'modern-ai-agents',
-      name: 'Modern AI & Autonomous Agents (Full Book)',
+      name: 'Modern AI & Autonomous Smart Systems',
       shortName: 'Modern AI & MCP',
       badge: '15 Chapters',
       icon: <Bot className="h-4 w-4 text-purple-500" />,
       moduleIds: ['modern-ai-agents'],
+    },
+    {
+      id: 'mathematics',
+      name: 'Mathematical Foundations for AI',
+      shortName: 'Math for AI',
+      badge: '3 Topics • 11 Ch',
+      icon: <Sigma className="h-4 w-4 text-indigo-500" />,
+      moduleIds: ['linear-algebra', 'calculus-optimization', 'probability-statistics'],
     },
     {
       id: 'cs-research',
@@ -69,20 +69,28 @@ export default function BookSidebar({
       moduleIds: ['research-methodology', 'data-cs-research', 'models-training', 'error-reduction', 'result-analysis', 'decision-framework'],
     },
     {
-      id: 'deep-learning',
-      name: 'Deep Learning (The Complete Book)',
-      shortName: 'Deep Learning',
+      id: 'classical-ml',
+      name: 'Machine Learning (The Complete Book)',
+      shortName: 'Machine Learning',
       badge: '15 Chapters',
-      icon: <Cpu className="h-4 w-4 text-violet-500" />,
-      moduleIds: ['deep-learning'],
+      icon: <Boxes className="h-4 w-4 text-emerald-500" />,
+      moduleIds: ['classical-ml'],
     },
     {
       id: 'nlp-llms',
-      name: 'Natural Language Processing (Full Book)',
+      name: 'Natural Language Processing & LLMs',
       shortName: 'NLP & LLMs',
       badge: '15 Chapters',
       icon: <MessageSquareText className="h-4 w-4 text-pink-500" />,
       moduleIds: ['nlp-llms'],
+    },
+    {
+      id: 'deep-learning',
+      name: 'Deep Learning (Neurons to Transformers)',
+      shortName: 'Deep Learning',
+      badge: '15 Chapters',
+      icon: <Cpu className="h-4 w-4 text-violet-500" />,
+      moduleIds: ['deep-learning'],
     },
     {
       id: 'computer-vision',
@@ -99,14 +107,6 @@ export default function BookSidebar({
       badge: '4 Chapters',
       icon: <Flame className="h-4 w-4 text-amber-500" />,
       moduleIds: ['reinforcement-learning'],
-    },
-    {
-      id: 'mathematics',
-      name: 'Mathematical Foundations',
-      shortName: 'Math for AI',
-      badge: '3 Topics • 11 Ch',
-      icon: <Sigma className="h-4 w-4 text-blue-500" />,
-      moduleIds: ['linear-algebra', 'calculus-optimization', 'probability-statistics'],
     },
   ], []);
 
