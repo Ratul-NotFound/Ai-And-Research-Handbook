@@ -1,4 +1,4 @@
-const CACHE_NAME = 'ai-book-v1';
+const CACHE_NAME = 'ai-book-v2';
 const STATIC_ASSETS = [
   '/',
   '/cheatsheet',
@@ -30,16 +30,20 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
+  // Only handle http and https requests (ignore chrome-extension, blob, etc.)
+  const url = new URL(event.request.url);
+  if (!url.protocol.startsWith('http')) return;
+
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
         // Return cached, then fetch in background (stale-while-revalidate)
         fetch(event.request)
           .then((networkResponse) => {
-            if (networkResponse && networkResponse.status === 200) {
+            if (networkResponse && networkResponse.status === 200 && (url.protocol === 'http:' || url.protocol === 'https:')) {
               caches.open(CACHE_NAME).then((cache) => {
                 cache.put(event.request, networkResponse);
-              });
+              }).catch(() => {});
             }
           })
           .catch(() => {});
@@ -51,10 +55,12 @@ self.addEventListener('fetch', (event) => {
           if (!networkResponse || networkResponse.status !== 200 || networkResponse.type !== 'basic') {
             return networkResponse;
           }
-          const responseToCache = networkResponse.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(event.request, responseToCache);
-          });
+          if (url.protocol === 'http:' || url.protocol === 'https:') {
+            const responseToCache = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache);
+            }).catch(() => {});
+          }
           return networkResponse;
         })
         .catch(() => {

@@ -1,53 +1,146 @@
 'use client';
 
-import React from 'react';
+import React, { useMemo } from 'react';
+import katex from 'katex';
 
 interface MarkdownContentProps {
   content: string;
 }
 
 /**
- * Super-robust Markdown Parser supporting:
- * - Markdown tables (| col | col |) with auto-normalization of inline table breaks
- * - Headings (##, ###, ####)
- * - Bold (**text**), Italic (*text*), Inline code (`code`)
- * - Blockquotes (> text)
- * - Numbered lists (1. item) with custom numbered badges
- * - Bullet lists (- item or * item)
- * - Checkboxes (- [x] / - [ ])
- * - Paragraphs with clean spacing
+ * Robust Math & Inline Text Renderer
+ * Parses:
+ * - $$ ... $$ display math (KaTeX)
+ * - $ ... $ inline math (KaTeX)
+ * - `code` (inline monospace)
+ * - **bold** (strong)
+ * - *italic* (em)
  */
-export default function MarkdownContent({ content }: MarkdownContentProps) {
-  // ── Inline styler ──────────────────────────────────────────────────────────
-  const renderInline = (text: string): React.ReactNode => {
-    // Split by code blocks first
-    const parts = text.split(/(`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g);
-    return parts.map((part, i) => {
-      if (part.startsWith('`') && part.endsWith('`'))
-        return (
-          <code
-            key={i}
-            className="rounded-md bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 font-mono text-[11px] sm:text-xs text-sky-700 dark:text-cyan-300 font-semibold border border-slate-200/80 dark:border-slate-700/60"
-          >
-            {part.slice(1, -1)}
-          </code>
-        );
-      if (part.startsWith('**') && part.endsWith('**'))
-        return (
-          <strong key={i} className="font-bold text-slate-950 dark:text-white">
-            {part.slice(2, -2)}
-          </strong>
-        );
-      if (part.startsWith('*') && part.endsWith('*'))
-        return (
-          <em key={i} className="italic text-slate-700 dark:text-slate-300">
-            {part.slice(1, -1)}
-          </em>
-        );
-      return part;
-    });
-  };
+export function RenderInlineText({ text }: { text: string }) {
+  if (!text) return null;
 
+  // Tokenize string for math ($$...$$, $...$), code (`...`), bold (**...**), italic (*...*)
+  // Note: match $$ first before $, and avoid empty matches
+  const tokenRegex = /(\$\$[\s\S]+?\$\$|\$(?:\\\$|[^\$\n])+\$|`[^`]+`|\*\*[^*]+\*\*|\*[^*]+\*)/g;
+  const parts = text.split(tokenRegex);
+
+  return (
+    <>
+      {parts.map((part, i) => {
+        if (!part) return null;
+
+        // Display math ($$ ... $$)
+        if (part.startsWith('$$') && part.endsWith('$$') && part.length >= 4) {
+          const rawMath = part.slice(2, -2).trim();
+          try {
+            const html = katex.renderToString(rawMath, {
+              displayMode: true,
+              throwOnError: false,
+            });
+            return (
+              <span
+                key={i}
+                className="block my-2 overflow-x-auto py-1.5 px-2 text-center text-slate-900 dark:text-slate-100"
+                dangerouslySetInnerHTML={{ __html: html }}
+              />
+            );
+          } catch {
+            return (
+              <span key={i} className="block my-2 text-center font-mono text-xs text-rose-500">
+                {rawMath}
+              </span>
+            );
+          }
+        }
+
+        // Inline math ($ ... $)
+        if (part.startsWith('$') && part.endsWith('$') && part.length >= 3) {
+          const rawMath = part.slice(1, -1).trim();
+          try {
+            const html = katex.renderToString(rawMath, {
+              displayMode: false,
+              throwOnError: false,
+            });
+            return (
+              <span
+                key={i}
+                className="inline-math px-0.5 font-serif text-slate-950 dark:text-slate-100"
+                dangerouslySetInnerHTML={{ __html: html }}
+              />
+            );
+          } catch {
+            return (
+              <span key={i} className="font-mono text-xs text-sky-700 dark:text-cyan-300">
+                {rawMath}
+              </span>
+            );
+          }
+        }
+
+        // Inline code (`...`)
+        if (part.startsWith('`') && part.endsWith('`') && part.length >= 2) {
+          return (
+            <code
+              key={i}
+              className="rounded-md bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 font-mono text-[11px] sm:text-xs text-sky-700 dark:text-cyan-300 font-semibold border border-slate-200/80 dark:border-slate-700/60"
+            >
+              {part.slice(1, -1)}
+            </code>
+          );
+        }
+
+        // Bold (**...**)
+        if (part.startsWith('**') && part.endsWith('**') && part.length >= 4) {
+          return (
+            <strong key={i} className="font-bold text-slate-950 dark:text-white">
+              <RenderInlineText text={part.slice(2, -2)} />
+            </strong>
+          );
+        }
+
+        // Italic (*...*)
+        if (part.startsWith('*') && part.endsWith('*') && part.length >= 2) {
+          return (
+            <em key={i} className="italic text-slate-700 dark:text-slate-300">
+              {part.slice(1, -1)}
+            </em>
+          );
+        }
+
+        // Plain text
+        return <React.Fragment key={i}>{part}</React.Fragment>;
+      })}
+    </>
+  );
+}
+
+/**
+ * Split table cells safely without breaking on `|` characters inside LaTeX math ($...$) or code (`...`)
+ */
+function splitTableCells(rowStr: string): string[] {
+  let protectedStr = '';
+  let inMath = false;
+  let inCode = false;
+
+  for (let j = 0; j < rowStr.length; j++) {
+    const ch = rowStr[j];
+    if (ch === '`') inCode = !inCode;
+    if (ch === '$' && !inCode) inMath = !inMath;
+
+    if (ch === '|' && (inMath || inCode)) {
+      protectedStr += '__MATH_PIPE__';
+    } else {
+      protectedStr += ch;
+    }
+  }
+
+  return protectedStr
+    .split('|')
+    .slice(1, -1)
+    .map((c) => c.replaceAll('__MATH_PIPE__', '|').trim());
+}
+
+export default function MarkdownContent({ content }: MarkdownContentProps) {
   // ── Table renderer ──────────────────────────────────────────────────────────
   const renderTable = (tableLines: string[], key: number | string) => {
     const dataLines = tableLines.filter((l) => {
@@ -56,10 +149,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
     });
     if (dataLines.length < 1) return null;
 
-    const headerCells = dataLines[0]
-      .split('|')
-      .slice(1, -1)
-      .map((h) => h.trim());
+    const headerCells = splitTableCells(dataLines[0]);
     const bodyRows = dataLines.slice(1);
 
     return (
@@ -76,17 +166,14 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
                     key={idx}
                     className="px-4 py-3 text-[11px] font-mono font-bold uppercase tracking-wider text-slate-700 dark:text-slate-300 border-r last:border-r-0 border-slate-200 dark:border-slate-800"
                   >
-                    {renderInline(h)}
+                    <RenderInlineText text={h} />
                   </th>
                 ))}
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
               {bodyRows.map((rowStr, rIdx) => {
-                const cells = rowStr
-                  .split('|')
-                  .slice(1, -1)
-                  .map((c) => c.trim());
+                const cells = splitTableCells(rowStr);
                 return (
                   <tr
                     key={rIdx}
@@ -101,7 +188,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
                         key={cIdx}
                         className="px-4 py-3 leading-relaxed border-r last:border-r-0 border-slate-100 dark:border-slate-800/60 align-top"
                       >
-                        {renderInline(cell)}
+                        <RenderInlineText text={cell} />
                       </td>
                     ))}
                   </tr>
@@ -115,10 +202,8 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
   };
 
   // ── Pre-process content to normalize accidental single-line tables ─────────
-  let normalized = content
-    // Replace double pipes || with newlines
+  const normalized = content
     .replace(/\|\s*\|/g, '|\n|')
-    // If a line starts with text followed by : | col |, split into two lines
     .replace(/^([^|\n]+:\s*)(\|.+)$/gm, '$1\n\n$2');
 
   const lines = normalized.split('\n');
@@ -136,7 +221,48 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       continue;
     }
 
-    // 1. TABLE — collect consecutive lines that start and end with |
+    // 1. STANDALONE DISPLAY MATH BLOCK ($$ ... $$)
+    if (trimmed.startsWith('$$')) {
+      const mathLines: string[] = [];
+      if (trimmed.endsWith('$$') && trimmed.length > 2) {
+        mathLines.push(trimmed.slice(2, -2).trim());
+        i++;
+      } else {
+        mathLines.push(trimmed.slice(2));
+        i++;
+        while (i < lines.length && !lines[i].trim().endsWith('$$')) {
+          mathLines.push(lines[i]);
+          i++;
+        }
+        if (i < lines.length && lines[i].trim().endsWith('$$')) {
+          mathLines.push(lines[i].trim().slice(0, -2));
+          i++;
+        }
+      }
+      const rawMath = mathLines.join('\n').trim();
+      try {
+        const html = katex.renderToString(rawMath, {
+          displayMode: true,
+          throwOnError: false,
+        });
+        elements.push(
+          <div
+            key={key++}
+            className="my-4 overflow-x-auto py-3 px-4 rounded-xl bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-center shadow-2xs font-serif text-slate-900 dark:text-slate-100"
+            dangerouslySetInnerHTML={{ __html: html }}
+          />
+        );
+      } catch {
+        elements.push(
+          <div key={key++} className="my-4 font-mono text-xs text-rose-500 text-center">
+            {rawMath}
+          </div>
+        );
+      }
+      continue;
+    }
+
+    // 2. TABLE — collect consecutive lines that start and end with |
     if (trimmed.startsWith('|') && trimmed.endsWith('|')) {
       const tableLines: string[] = [];
       while (
@@ -151,21 +277,21 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       continue;
     }
 
-    // 2. H2 (## heading)
+    // 3. H2 (## heading)
     if (trimmed.startsWith('## ')) {
       elements.push(
         <h2
           key={key++}
           className="text-xl sm:text-2xl font-black text-slate-950 dark:text-white tracking-tight mt-8 mb-3"
         >
-          {renderInline(trimmed.slice(3))}
+          <RenderInlineText text={trimmed.slice(3)} />
         </h2>
       );
       i++;
       continue;
     }
 
-    // 3. H3 (### heading)
+    // 4. H3 (### heading)
     if (trimmed.startsWith('### ')) {
       elements.push(
         <h3
@@ -173,28 +299,28 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
           className="text-base sm:text-lg font-bold text-slate-950 dark:text-white mt-6 mb-2 flex items-center gap-2"
         >
           <span className="h-1.5 w-1.5 rounded-full bg-sky-500 dark:bg-cyan-400 shrink-0" />
-          {renderInline(trimmed.slice(4))}
+          <RenderInlineText text={trimmed.slice(4)} />
         </h3>
       );
       i++;
       continue;
     }
 
-    // 4. H4 (#### heading)
+    // 5. H4 (#### heading)
     if (trimmed.startsWith('#### ')) {
       elements.push(
         <h4
           key={key++}
           className="text-sm sm:text-base font-bold text-slate-900 dark:text-slate-100 mt-4 mb-1.5"
         >
-          {renderInline(trimmed.slice(5))}
+          <RenderInlineText text={trimmed.slice(5)} />
         </h4>
       );
       i++;
       continue;
     }
 
-    // 5. BLOCKQUOTE (> text)
+    // 6. BLOCKQUOTE (> text)
     if (trimmed.startsWith('> ')) {
       const quoteLines: string[] = [];
       while (i < lines.length && lines[i].trim().startsWith('>')) {
@@ -208,7 +334,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
         >
           {quoteLines.map((ql, qi) => (
             <p key={qi} className="leading-relaxed">
-              {renderInline(ql)}
+              <RenderInlineText text={ql} />
             </p>
           ))}
         </div>
@@ -216,7 +342,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       continue;
     }
 
-    // 6. NUMBERED LIST
+    // 7. NUMBERED LIST
     if (/^\d+\.\s/.test(trimmed)) {
       const listItems: string[] = [];
       while (i < lines.length && /^\s*\d+\.\s/.test(lines[i])) {
@@ -234,7 +360,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
                 {iIdx + 1}
               </span>
               <span className="flex-1 leading-relaxed pt-0.5">
-                {renderInline(item)}
+                <RenderInlineText text={item} />
               </span>
             </li>
           ))}
@@ -243,7 +369,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       continue;
     }
 
-    // 7. CHECKBOX LIST (- [x] or - [ ])
+    // 8. CHECKBOX LIST (- [x] or - [ ])
     if (/^-\s\[.\]/.test(trimmed)) {
       const checkItems: { checked: boolean; text: string }[] = [];
       while (i < lines.length && /^\s*-\s\[.\]/.test(lines[i])) {
@@ -269,7 +395,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
                 {item.checked ? '✓' : ''}
               </span>
               <span className="flex-1 leading-relaxed">
-                {renderInline(item.text)}
+                <RenderInlineText text={item.text} />
               </span>
             </li>
           ))}
@@ -278,7 +404,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       continue;
     }
 
-    // 8. BULLET LIST (- item or * item)
+    // 9. BULLET LIST (- item or * item)
     if (/^[-*•]\s/.test(trimmed)) {
       const listItems: string[] = [];
       while (i < lines.length && /^\s*[-*•]\s/.test(lines[i])) {
@@ -293,7 +419,9 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
               className="flex items-start gap-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300"
             >
               <span className="h-1.5 w-1.5 rounded-full bg-sky-500 dark:bg-cyan-400 shrink-0 mt-2" />
-              <span className="flex-1 leading-relaxed">{renderInline(item)}</span>
+              <span className="flex-1 leading-relaxed">
+                <RenderInlineText text={item} />
+              </span>
             </li>
           ))}
         </ul>
@@ -301,7 +429,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       continue;
     }
 
-    // 9. PARAGRAPH — collect consecutive non-special lines
+    // 10. PARAGRAPH — collect consecutive non-special lines
     const paraLines: string[] = [];
     while (
       i < lines.length &&
@@ -309,6 +437,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
       !lines[i].trim().startsWith('|') &&
       !lines[i].trim().startsWith('#') &&
       !lines[i].trim().startsWith('>') &&
+      !lines[i].trim().startsWith('$$') &&
       !/^\s*\d+\.\s/.test(lines[i]) &&
       !/^\s*[-*•]\s/.test(lines[i]) &&
       !/^\s*-\s\[.\]/.test(lines[i])
@@ -322,7 +451,7 @@ export default function MarkdownContent({ content }: MarkdownContentProps) {
           key={key++}
           className="text-xs sm:text-sm leading-relaxed text-slate-700 dark:text-slate-300 my-2"
         >
-          {renderInline(paraLines.join(' '))}
+          <RenderInlineText text={paraLines.join(' ')} />
         </p>
       );
     }

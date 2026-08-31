@@ -89,7 +89,7 @@ export default function TopicOverviewPage({ params }: PageProps) {
   const totalChapters = matchedModules.reduce((acc, m) => acc + m.chapters.length, 0);
 
   return (
-    <div className="flex min-h-[100dvh] flex-col bg-white dark:bg-[#0b0f19] text-slate-800 dark:text-slate-200 transition-colors">
+    <div suppressHydrationWarning className="flex min-h-[100dvh] flex-col bg-white dark:bg-[#0b0f19] text-slate-800 dark:text-slate-200 transition-colors">
       <Navbar
         onOpenSearch={() => setSearchOpen(true)}
         onToggleSidebar={() => setMobileDrawerOpen(true)}

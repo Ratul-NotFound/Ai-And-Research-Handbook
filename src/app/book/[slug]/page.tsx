@@ -63,7 +63,7 @@ export default function DynamicChapterPage({ params }: PageProps) {
   const { chapter, module, prevChapter, nextChapter } = chapterData;
 
   return (
-    <div className="flex min-h-[100dvh] flex-col bg-[#f8fafc] dark:bg-[#0b0f19] text-slate-800 dark:text-slate-200 transition-colors">
+    <div suppressHydrationWarning className="flex min-h-[100dvh] flex-col bg-[#f8fafc] dark:bg-[#0b0f19] text-slate-800 dark:text-slate-200 transition-colors">
       {/* Top Full-Width Navbar */}
       <Navbar
         onOpenSearch={() => setSearchOpen(true)}

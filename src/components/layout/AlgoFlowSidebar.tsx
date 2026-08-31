@@ -12,17 +12,12 @@ import {
   Search,
   Clock,
   BookOpen,
-  Zap,
-  BookMarked,
   ChevronDown,
   ChevronRight,
-  Compass,
-  CheckCircle2,
   Boxes,
   Eye,
   Flame,
-  MessageSquareText,
-  Layers
+  MessageSquareText
 } from 'lucide-react';
 
 interface BookSidebarProps {
@@ -31,7 +26,6 @@ interface BookSidebarProps {
   onOpenSearch?: () => void;
 }
 
-// 7 Master Dedicated Curriculum Domains
 interface DomainDefinition {
   id: string;
   name: string;
@@ -50,26 +44,26 @@ export default function BookSidebar({
 
   const domainList: DomainDefinition[] = useMemo(() => [
     {
+      id: 'classical-ml',
+      name: 'Machine Learning (Full Book)',
+      shortName: 'Machine Learning',
+      badge: '15 Chapters',
+      icon: <Boxes className="h-4 w-4 text-emerald-500" />,
+      moduleIds: ['classical-ml'],
+    },
+    {
       id: 'cs-research',
       name: 'CS Research Methodology',
       shortName: 'CS Research',
-      badge: 'Methodology',
+      badge: '6 Topics • 18 Ch',
       icon: <GraduationCap className="h-4 w-4 text-sky-500" />,
       moduleIds: ['research-methodology', 'data-cs-research', 'models-training', 'error-reduction', 'result-analysis', 'decision-framework'],
-    },
-    {
-      id: 'classical-ml',
-      name: 'Classical Machine Learning',
-      shortName: 'Machine Learning',
-      badge: 'Statistical ML',
-      icon: <Boxes className="h-4 w-4 text-emerald-500" />,
-      moduleIds: ['classical-ml'],
     },
     {
       id: 'deep-learning',
       name: 'Deep Learning Core & Scaling',
       shortName: 'Deep Learning',
-      badge: 'Neural Core',
+      badge: '5 Chapters',
       icon: <Cpu className="h-4 w-4 text-violet-500" />,
       moduleIds: ['deep-learning'],
     },
@@ -77,7 +71,7 @@ export default function BookSidebar({
       id: 'nlp-llms',
       name: 'NLP & Large Language Models',
       shortName: 'NLP & LLMs',
-      badge: 'Generative AI',
+      badge: '6 Chapters',
       icon: <MessageSquareText className="h-4 w-4 text-pink-500" />,
       moduleIds: ['nlp-llms'],
     },
@@ -85,7 +79,7 @@ export default function BookSidebar({
       id: 'computer-vision',
       name: 'Computer Vision & Generative AI',
       shortName: 'Vision & Diffusion',
-      badge: 'Spatial Vision',
+      badge: '5 Chapters',
       icon: <Eye className="h-4 w-4 text-cyan-500" />,
       moduleIds: ['computer-vision'],
     },
@@ -93,7 +87,7 @@ export default function BookSidebar({
       id: 'reinforcement-learning',
       name: 'Reinforcement Learning & Agents',
       shortName: 'RL & Decision',
-      badge: 'Decision SOTA',
+      badge: '4 Chapters',
       icon: <Flame className="h-4 w-4 text-amber-500" />,
       moduleIds: ['reinforcement-learning'],
     },
@@ -101,21 +95,19 @@ export default function BookSidebar({
       id: 'mathematics',
       name: 'Mathematical Foundations',
       shortName: 'Math for AI',
-      badge: 'Rigorous Math',
+      badge: '3 Topics • 11 Ch',
       icon: <Sigma className="h-4 w-4 text-blue-500" />,
       moduleIds: ['linear-algebra', 'calculus-optimization', 'probability-statistics'],
     },
   ], []);
 
-  // 1. Identify active domain based on currentModuleId or current chapter pathname
+  // 1. Detect active domain based on currentModuleId or pathname
   const detectActiveDomain = (): string => {
-    // Check by currentModuleId first
     if (currentModuleId) {
       const match = domainList.find((d) => d.moduleIds.includes(currentModuleId));
       if (match) return match.id;
     }
 
-    // Check by active chapter in pathname
     for (const d of domainList) {
       const hasChapter = AI_CURRICULUM
         .filter((m) => d.moduleIds.includes(m.id))
@@ -123,31 +115,30 @@ export default function BookSidebar({
       if (hasChapter) return d.id;
     }
 
-    return 'cs-research';
+    return 'classical-ml';
   };
 
   const [activeDomainId, setActiveDomainId] = useState<string>(detectActiveDomain);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  // Sync active domain whenever currentModuleId or pathname changes
   useEffect(() => {
     setActiveDomainId(detectActiveDomain());
   }, [currentModuleId, pathname]);
 
   const currentDomain = domainList.find((d) => d.id === activeDomainId) || domainList[0];
 
-  // Get modules strictly belonging to the active domain
+  // Get modules strictly belonging to the active domain ONLY
   const domainModules: Module[] = useMemo(() => {
     return AI_CURRICULUM.filter((m) => currentDomain.moduleIds.includes(m.id));
   }, [currentDomain]);
 
   const totalChapters = domainModules.reduce((acc, m) => acc + m.chapters.length, 0);
 
-  // 2. Collapsible state for modules (if domain has multiple modules)
+  // Accordion state
   const [expandedModules, setExpandedModules] = useState<Record<string, boolean>>(() => {
     const initial: Record<string, boolean> = {};
     domainModules.forEach((mod) => {
-      initial[mod.id] = true; // Default expanded within domain
+      initial[mod.id] = true;
     });
     return initial;
   });
@@ -174,7 +165,7 @@ export default function BookSidebar({
       <div className="relative space-y-1">
         <div className="flex items-center justify-between px-1 mb-1">
           <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500">
-            Active Domain Scope
+            Active Book Scope
           </span>
           <Link
             href="/"
@@ -194,7 +185,7 @@ export default function BookSidebar({
               {currentDomain.icon}
             </span>
             <div className="min-w-0">
-              <span className="text-[9px] font-mono font-bold uppercase text-sky-600 dark:text-cyan-400 block leading-tight">
+              <span className="text-[9px] font-mono font-bold uppercase text-emerald-600 dark:text-emerald-400 block leading-tight">
                 {currentDomain.badge}
               </span>
               <h3 className="text-xs font-bold text-slate-900 dark:text-white truncate leading-tight">
@@ -207,7 +198,7 @@ export default function BookSidebar({
 
         {/* Dropdown Menu Options */}
         {dropdownOpen && (
-          <div className="absolute top-full left-0 right-0 z-50 mt-1 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-1.5 shadow-xl space-y-1">
+          <div className="absolute top-full left-0 right-0 z-50 mt-1 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-1.5 shadow-xl space-y-1 max-h-80 overflow-y-auto">
             {domainList.map((d) => {
               const isSelected = d.id === activeDomainId;
               const dModules = AI_CURRICULUM.filter((m) => d.moduleIds.includes(m.id));
@@ -222,7 +213,7 @@ export default function BookSidebar({
                   }}
                   className={`w-full flex items-center justify-between p-2 rounded-lg text-xs transition-colors text-left ${
                     isSelected
-                      ? 'bg-sky-50 dark:bg-sky-950/50 text-sky-700 dark:text-cyan-300 font-bold'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-300 font-bold'
                       : 'text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-900'
                   }`}
                 >
@@ -240,21 +231,21 @@ export default function BookSidebar({
         )}
       </div>
 
-      {/* 2. ACTIVE DOMAIN HEADER & CHAPTER SUMMARY */}
+      {/* 2. ACTIVE BOOK HEADER SUMMARY */}
       <div className="rounded-xl border border-slate-200/80 dark:border-slate-800 bg-slate-50/60 dark:bg-slate-900/40 p-3 shadow-2xs flex items-center justify-between">
         <div>
           <span className="text-[10px] font-mono font-bold uppercase text-slate-400 block">
-            Domain Focus
+            Table of Contents
           </span>
           <p className="text-xs font-bold text-slate-900 dark:text-white">
-            {domainModules.length} {domainModules.length === 1 ? 'Topic' : 'Topics'} • {totalChapters} Chapters
+            {totalChapters} Chapters Total
           </p>
         </div>
         <Link
           href={`/topic/${currentDomain.id}`}
-          className="text-[11px] font-mono font-bold text-sky-600 dark:text-cyan-400 hover:underline"
+          className="text-[11px] font-mono font-bold text-emerald-600 dark:text-emerald-400 hover:underline"
         >
-          Overview →
+          Book Overview →
         </Link>
       </div>
 
@@ -265,15 +256,15 @@ export default function BookSidebar({
       >
         <div className="flex items-center gap-2">
           <Search className="h-3.5 w-3.5 text-slate-400" />
-          <span>Search this domain...</span>
+          <span className="truncate">Search {currentDomain.shortName}...</span>
         </div>
         <kbd className="rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[9px] font-mono text-slate-500">
           ⌘K
         </kbd>
       </button>
 
-      {/* 4. ISOLATED TOPICS & CHAPTERS LIST (Strictly for this domain only!) */}
-      <div className="space-y-3 pt-1 pb-10">
+      {/* 4. ISOLATED CHAPTERS LIST (Strictly for this book only!) */}
+      <div className="space-y-2 pt-1 pb-10">
         {domainModules.map((module) => {
           const isExpanded = expandedModules[module.id] !== false;
           const hasMultipleModules = domainModules.length > 1;
@@ -315,10 +306,10 @@ export default function BookSidebar({
                 </button>
               )}
 
-              {/* Chapters Sub-List */}
+              {/* Chapters List */}
               {isExpanded && (
                 <div className={`space-y-1.5 ${hasMultipleModules ? 'px-2 pb-2.5 pt-1 border-t border-slate-100 dark:border-slate-800/60' : ''}`}>
-                  {module.chapters.map((chapter, cIdx) => {
+                  {module.chapters.map((chapter) => {
                     const isActive = pathname === `/book/${chapter.slug}`;
 
                     return (
@@ -328,20 +319,13 @@ export default function BookSidebar({
                         onClick={onCloseMobile}
                         className={`group relative flex items-center justify-between rounded-xl px-3 py-2.5 text-xs transition-all ${
                           isActive
-                            ? 'bg-sky-600 dark:bg-cyan-600 text-white font-bold shadow-xs'
+                            ? 'bg-emerald-600 dark:bg-emerald-600 text-white font-bold shadow-xs'
                             : 'border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/60 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 hover:text-slate-950 dark:hover:text-white'
                         }`}
                       >
                         <div className="flex items-center gap-2 min-w-0 pr-2">
-                          <span
-                            className={`font-mono text-[10px] font-bold shrink-0 ${
-                              isActive ? 'text-sky-100' : 'text-slate-400'
-                            }`}
-                          >
-                            {module.number}.{cIdx + 1}
-                          </span>
                           <span className="truncate leading-tight">
-                            {chapter.title.replace(/^[\d.]+\s*/, '')}
+                            {chapter.title}
                           </span>
                         </div>
 
@@ -353,7 +337,7 @@ export default function BookSidebar({
                           )}
                           <span
                             className={`text-[9px] font-mono flex items-center gap-0.5 ${
-                              isActive ? 'text-sky-100' : 'text-slate-400'
+                              isActive ? 'text-emerald-100' : 'text-slate-400'
                             }`}
                           >
                             <Clock className="h-2.5 w-2.5" />

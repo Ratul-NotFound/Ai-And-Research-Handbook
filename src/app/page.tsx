@@ -71,25 +71,25 @@ export default function HomePage() {
       ]
     },
     {
-      id: 'machine-learning',
-      title: 'Machine Learning & Deep Learning Core',
-      badge: 'Architecture & SOTA',
-      topicCount: 5,
-      chapterCount: 25,
-      description: 'Master convex models, regularization duality, SVM kernels, tree ensembles (XGBoost/LightGBM/CatBoost), deep backpropagation, Transformer self-attention, RoPE, FlashAttention-2/3, LoRA/QLoRA PEFT, and reasoning agents.',
-      icon: <Cpu className="h-7 w-7 text-violet-600 dark:text-violet-400" />,
-      accentBorder: 'border-violet-200 dark:border-violet-800/80 hover:border-violet-500',
-      accentBg: 'bg-violet-50/30 dark:bg-violet-950/20',
-      badgeBg: 'bg-violet-100 dark:bg-violet-950 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-800',
-      pathUrl: '/topic/machine-learning',
-      startChapterUrl: '/book/supervised-linear-logistic-regression',
+      id: 'classical-ml',
+      title: 'Machine Learning (The Complete Book)',
+      badge: '15 In-Depth Chapters',
+      topicCount: 1,
+      chapterCount: 15,
+      description: 'From first-principles foundations, data preprocessing, and convex optimization to tree ensembles (XGBoost/LightGBM/CatBoost), SVM kernels, deep neural networks, CNNs, recommendation systems, time-series forecasting, and Optuna hyperparameter tuning.',
+      icon: <Boxes className="h-7 w-7 text-emerald-600 dark:text-emerald-400" />,
+      accentBorder: 'border-emerald-200 dark:border-emerald-800/80 hover:border-emerald-500',
+      accentBg: 'bg-emerald-50/30 dark:bg-emerald-950/20',
+      badgeBg: 'bg-emerald-100 dark:bg-emerald-950 text-emerald-700 dark:text-emerald-300 border-emerald-200 dark:border-emerald-800',
+      pathUrl: '/topic/classical-ml',
+      startChapterUrl: '/book/what-is-machine-learning-foundations',
       highlights: [
-        'OLS Normal Equation, Logistic Sigmoid & Strict Convexity',
-        'L1 Lasso vs L2 Ridge Geometric Sparsity Duality',
-        'Support Vector Machines (SVM) & RBF Kernel Trick',
-        'XGBoost 2nd-Order Taylor Optimization & LightGBM',
-        'Transformers: Scaled Dot-Product, RoPE & GQA',
-        'PEFT: LoRA Low-Rank Adaptation & QLoRA 4-bit NF4'
+        'ML Paradigm Shift (Data + Answers = Rules) & 9-Phase Lifecycle',
+        'Data Preprocessing, Outliers, RobustScaler & Leak-Free Splits',
+        'Linear/Logistic Regression & House Pricing Worked Calculation',
+        'Random Forest & Gradient Boosting (XGBoost, LightGBM, CatBoost)',
+        'Neural Networks, Backprop Chain Rule & CNN Vision Architectures',
+        'PCA, Recommender Systems (NDCG), Time Series & Optuna Tuning'
       ]
     },
     {
@@ -115,7 +115,7 @@ export default function HomePage() {
   ];
 
   return (
-    <div className="flex min-h-[100dvh] flex-col bg-white dark:bg-[#0b0f19] text-slate-800 dark:text-slate-200 transition-colors">
+    <div suppressHydrationWarning className="flex min-h-[100dvh] flex-col bg-white dark:bg-[#0b0f19] text-slate-800 dark:text-slate-200 transition-colors">
       <Navbar
         onOpenSearch={() => setSearchOpen(true)}
         onToggleSidebar={() => setMobileDrawerOpen(true)}
