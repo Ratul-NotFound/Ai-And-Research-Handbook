@@ -9,8 +9,9 @@ import CommandPalette from '@/components/search/CommandPalette';
 import { 
   CsResearchCardBackdrop, 
   MachineLearningCardBackdrop, 
-  MathematicsCardBackdrop,
-  DeepLearningCardBackdrop
+  DeepLearningCardBackdrop,
+  NlpCardBackdrop,
+  MathematicsCardBackdrop
 } from '@/components/home/CardBackdrops';
 import { 
   BookOpen, 
@@ -19,6 +20,7 @@ import {
   GraduationCap,
   Boxes,
   Cpu,
+  MessageSquareText,
   Sigma,
   Sparkles,
   ChevronRight,
@@ -47,7 +49,7 @@ export default function HomePage() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
 
-  // 4 Flagship Curriculum Portals (Unified, Clean, Modern Architecture)
+  // 5 Flagship Curriculum Portals (Unified, Clean, Modern Architecture)
   const masterPaths: MasterPath[] = [
     {
       id: 'cs-research',
@@ -113,6 +115,28 @@ export default function HomePage() {
         'Backpropagation Chain Rule & Adam/AdamW Optimizers',
         'CNNs, ResNet Skip Connections & YOLO/UNet Architectures',
         'Self-Attention, Transformers (BERT/GPT) & Diffusion SOTA',
+      ]
+    },
+    {
+      id: 'nlp-llms',
+      title: 'Natural Language Processing & LLMs',
+      badge: '15 In-Depth Chapters',
+      topicCount: 1,
+      chapterCount: 15,
+      description: 'From linguistic hierarchies, text preprocessing, and word embeddings (Word2Vec/GloVe) to self-attention, BERT, GPT-4, LoRA fine-tuning, DPO alignment, and RAG vector search.',
+      icon: <MessageSquareText className="h-6 w-6 text-pink-600 dark:text-pink-400" />,
+      iconBg: 'bg-pink-50 dark:bg-pink-950/80 border-pink-200/80 dark:border-pink-800 text-pink-600 dark:text-pink-400',
+      cardGradient: 'from-pink-500/[0.05] via-pink-500/[0.01] to-transparent dark:from-pink-500/[0.08] dark:via-transparent dark:to-transparent',
+      borderClass: 'border-slate-200/90 dark:border-slate-800 hover:border-pink-400 dark:hover:border-pink-500/80 hover:shadow-xl hover:shadow-pink-500/[0.06]',
+      badgeClass: 'bg-pink-50 dark:bg-pink-950/80 text-pink-700 dark:text-pink-300 border-pink-200 dark:border-pink-800',
+      primaryButton: 'bg-pink-600 hover:bg-pink-700 text-white shadow-xs hover:shadow-md hover:shadow-pink-500/20',
+      pathUrl: '/topic/nlp-llms',
+      startChapterUrl: '/book/foundations-of-nlp-linguistic-hierarchy',
+      highlights: [
+        'Linguistic Hierarchy, Text Preprocessing & BPE Tokenization',
+        'TF-IDF, Word2Vec, GloVe & FastText Subword Embeddings',
+        'Self-Attention, Transformer Blocks, BERT & GPT-4 LLMs',
+        'LoRA Fine-Tuning, DPO Alignment & Vector DB RAG Pipelines',
       ]
     },
     {
@@ -190,7 +214,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* 4 PRIMARY CURRICULUM PATHS (Separated Domain Portals) */}
+        {/* 5 PRIMARY CURRICULUM PATHS (Separated Domain Portals) */}
         <section suppressHydrationWarning className="space-y-6">
           <div suppressHydrationWarning className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
             <div suppressHydrationWarning>
@@ -202,11 +226,11 @@ export default function HomePage() {
               </h2>
             </div>
             <span className="text-xs font-mono text-slate-400">
-              11 Topics • 59 Chapters
+              12 Topics • 74 Chapters
             </span>
           </div>
 
-          <div suppressHydrationWarning className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 sm:gap-6">
+          <div suppressHydrationWarning className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
             {masterPaths.map((path) => (
               <div
                 key={path.id}
@@ -217,6 +241,7 @@ export default function HomePage() {
                 {path.id === 'cs-research' && <CsResearchCardBackdrop />}
                 {path.id === 'classical-ml' && <MachineLearningCardBackdrop />}
                 {path.id === 'deep-learning' && <DeepLearningCardBackdrop />}
+                {path.id === 'nlp-llms' && <NlpCardBackdrop />}
                 {path.id === 'mathematics' && <MathematicsCardBackdrop />}
 
                 <div className="relative z-10 space-y-4">

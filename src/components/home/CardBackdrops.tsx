@@ -218,3 +218,56 @@ export function DeepLearningCardBackdrop() {
     </div>
   );
 }
+
+/**
+ * 5. NLP & LARGE LANGUAGE MODELS - INTEGRATED TOPIC BACKGROUND
+ * Token embedding projections, language attention graphs, and semantic dialogue chat bubbles
+ */
+export function NlpCardBackdrop() {
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-2xl">
+      {/* Ambient gradient aura */}
+      <div className="absolute top-0 right-0 w-48 h-48 rounded-full bg-pink-400/10 dark:bg-rose-500/15 blur-3xl" />
+
+      {/* Typography grid lines */}
+      <svg className="absolute inset-0 w-full h-full opacity-[0.035] dark:opacity-[0.03]" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="bg-grid-nlp" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 0 10 L 20 10 M 10 0 L 10 20" fill="none" stroke="currentColor" strokeWidth="0.75" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#bg-grid-nlp)" />
+      </svg>
+
+      {/* Language Semantic Graph & Token Flow Watermark */}
+      <svg
+        className="absolute -right-6 -bottom-6 w-56 h-56 opacity-10 dark:opacity-15 text-pink-600 dark:text-rose-400 transition-all duration-700 group-hover:scale-105 group-hover:opacity-20"
+        viewBox="0 0 200 200"
+        fill="none"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        {/* Dialogue Stream Paths */}
+        <path d="M 20 120 C 60 70, 110 50, 180 70" stroke="currentColor" strokeWidth="1.75" strokeDasharray="3 3" />
+        <path d="M 40 160 C 90 120, 130 110, 170 150" stroke="currentColor" strokeWidth="1.5" />
+        <path d="M 60 40 L 120 90" stroke="currentColor" strokeWidth="1.25" strokeDasharray="2 2" />
+        <path d="M 120 90 L 160 110" stroke="currentColor" strokeWidth="1.5" />
+
+        {/* Semantic Word Nodes */}
+        <circle cx="60" cy="40" r="8" stroke="currentColor" strokeWidth="1.5" fill="currentColor" fillOpacity="0.1" />
+        <circle cx="60" cy="40" r="3" fill="currentColor" />
+
+        <circle cx="120" cy="90" r="12" stroke="currentColor" strokeWidth="2" fill="currentColor" fillOpacity="0.15" />
+        <circle cx="120" cy="90" r="4.5" fill="currentColor" />
+
+        <circle cx="180" cy="70" r="9" stroke="currentColor" strokeWidth="1.75" fill="currentColor" fillOpacity="0.15" />
+        <circle cx="180" cy="70" r="3.5" fill="currentColor" />
+
+        <circle cx="40" cy="160" r="7" stroke="currentColor" strokeWidth="1.25" fill="currentColor" fillOpacity="0.1" />
+        <circle cx="40" cy="160" r="2.5" fill="currentColor" />
+
+        <circle cx="170" cy="150" r="10" stroke="currentColor" strokeWidth="1.75" fill="currentColor" fillOpacity="0.15" />
+        <circle cx="170" cy="150" r="4" fill="currentColor" />
+      </svg>
+    </div>
+  );
+}
