@@ -245,47 +245,44 @@ export default function HomePage() {
         {/* FULL-PAGE RESPONSIVE HERO SECTION */}
         <section 
           suppressHydrationWarning 
-          className="min-h-[68vh] sm:min-h-[78vh] flex flex-col items-center justify-center text-center space-y-6 max-w-4xl mx-auto py-8 sm:py-12"
+          className="min-h-[calc(100dvh-5rem)] flex flex-col items-center justify-between text-center max-w-4xl mx-auto py-8 sm:py-12"
         >
-          {/* Main Hero Headline with Stroke-Draw Then Fill-Reveal Animation */}
-          <TextStrokeReveal text="First-Principles Artificial Intelligence & Research Handbook" />
+          <div className="w-full flex-1 flex flex-col items-center justify-center space-y-6">
+            {/* Main Hero Headline with Synchronized Stroke-Draw Then Fill-Reveal Animation */}
+            <TextStrokeReveal />
 
-          {/* Slogan Synced with Logo Cyan-Purple Colorway */}
-          <p className="text-base sm:text-xl lg:text-2xl font-black bg-gradient-to-r from-cyan-600 via-purple-600 to-cyan-500 dark:from-cyan-400 dark:via-purple-400 dark:to-cyan-300 bg-clip-text text-transparent tracking-tight max-w-3xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-700 delay-300">
-            From Mathematical Foundations to Autonomous Agent Swarms.
-          </p>
+            {/* Clean 1-Line Slogan (Pure Solid Color, No Gradients) */}
+            <p className="text-sm sm:text-base md:text-lg font-medium text-slate-700 dark:text-slate-300 tracking-tight max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500 delay-300">
+              From Mathematical Foundations to Autonomous Agent Swarms • 6 Volumes • 89 Chapters
+            </p>
 
-          {/* Subtitle */}
-          <p className="text-xs sm:text-base text-slate-600 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-700 delay-500">
-            A comprehensive, open-access digital library of 6 first-principles textbooks engineered for researchers, engineers, and scholars with mathematical proofs, derivation steps, and interactive sandboxes.
-          </p>
+            {/* Minimal Action CTAs */}
+            <div suppressHydrationWarning className="pt-3 flex items-center justify-center gap-3 flex-wrap animate-in fade-in slide-in-from-bottom-2 duration-500 delay-500">
+              <button
+                onClick={() => setSearchOpen(true)}
+                className="flex items-center gap-2 rounded-xl bg-slate-900 dark:bg-white text-white dark:text-slate-900 px-6 py-3 text-xs sm:text-sm font-bold shadow-xs hover:bg-slate-800 dark:hover:bg-slate-100 transition-all hover:scale-105 cursor-pointer"
+              >
+                <Search className="h-4 w-4" />
+                <span>Search Library (⌘K)</span>
+              </button>
 
-          {/* Action CTAs */}
-          <div suppressHydrationWarning className="pt-2 flex items-center justify-center gap-3.5 flex-wrap">
-            <button
-              onClick={() => setSearchOpen(true)}
-              className="flex items-center gap-2 rounded-xl bg-slate-950 dark:bg-white text-white dark:text-slate-950 px-6 py-3 text-xs sm:text-sm font-bold shadow-md hover:bg-slate-800 dark:hover:bg-slate-100 transition-all hover:scale-105 cursor-pointer ring-1 ring-cyan-500/20"
-            >
-              <Search className="h-4 w-4 text-cyan-400 dark:text-cyan-600" />
-              <span>Search Library (⌘K)</span>
-            </button>
-
-            <Link
-              href="/cheatsheet"
-              className="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-3 text-xs sm:text-sm font-bold text-slate-800 dark:text-slate-200 hover:border-cyan-400 dark:hover:border-cyan-500 transition-all hover:scale-105 shadow-2xs"
-            >
-              <Compass className="h-4 w-4 text-purple-600 dark:text-purple-400" />
-              <span>Master Cheatsheet</span>
-            </Link>
+              <Link
+                href="/cheatsheet"
+                className="flex items-center gap-2 rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 py-3 text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 transition-all hover:scale-105 shadow-2xs"
+              >
+                <Compass className="h-4 w-4 text-slate-600 dark:text-slate-400" />
+                <span>Master Cheatsheet</span>
+              </Link>
+            </div>
           </div>
 
-          {/* Scroll Down to Bookshelf */}
+          {/* Scroll Down Prompt at the Bottom of First Viewport */}
           <a
             href="#curriculum"
-            className="pt-6 inline-flex flex-col items-center gap-1 text-xs font-mono font-semibold text-slate-400 dark:text-slate-500 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors group cursor-pointer"
+            className="pt-4 inline-flex flex-col items-center gap-1 text-xs font-mono font-semibold text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors group cursor-pointer"
           >
             <span>Explore 6 Textbook Volumes</span>
-            <ChevronDown className="h-4 w-4 text-cyan-500 animate-bounce group-hover:translate-y-1 transition-transform" />
+            <ChevronDown className="h-4 w-4 animate-bounce group-hover:translate-y-1 transition-transform" />
           </a>
         </section>
 
