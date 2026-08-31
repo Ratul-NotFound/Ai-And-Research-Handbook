@@ -318,32 +318,42 @@ export default function BookSidebar({
               {/* Chapters List */}
               {isExpanded && (
                 <div className={`space-y-1.5 ${hasMultipleModules ? 'px-2 pb-2.5 pt-1 border-t border-slate-100 dark:border-slate-800/60' : ''}`}>
-                  {module.chapters.map((chapter) => {
+                  {module.chapters.map((chapter, chIdx) => {
                     const isActive = pathname === `/book/${chapter.slug}`;
+                    
+                    // Strip verbose "Chapter X:" prefix to give maximum horizontal space to the real title
+                    const match = chapter.title.match(/^(?:Chapter\s+)?(\d+(?:\.\d+)?)(?:[:\s—–-]+)\s*(.+)$/i);
+                    const num = match ? match[1] : `${chIdx + 1}`;
+                    const name = match ? match[2].trim() : chapter.title.replace(/^Chapter\s+/i, '').trim();
 
                     return (
                       <Link
                         key={chapter.id}
                         href={`/book/${chapter.slug}`}
                         onClick={onCloseMobile}
-                        className={`group relative flex items-center justify-between rounded-xl px-3 py-2.5 text-xs transition-all ${
+                        title={chapter.title}
+                        className={`group relative flex items-center justify-between gap-2 rounded-xl px-2.5 py-2 text-xs transition-all ${
                           isActive
                             ? 'bg-emerald-600 dark:bg-emerald-600 text-white font-bold shadow-xs'
                             : 'border border-slate-200/80 dark:border-slate-800/80 bg-white dark:bg-slate-900/60 text-slate-700 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-700 hover:text-slate-950 dark:hover:text-white'
                         }`}
                       >
-                        <div className="flex items-center gap-2 min-w-0 pr-2">
-                          <span className="truncate leading-tight">
-                            {chapter.title}
+                        <div className="flex items-center gap-2 min-w-0 flex-1">
+                          <span
+                            className={`flex h-5 min-w-[20px] px-1 shrink-0 items-center justify-center rounded-md font-mono text-[10px] font-bold ${
+                              isActive
+                                ? 'bg-emerald-700 text-white'
+                                : 'bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                            }`}
+                          >
+                            {num}
+                          </span>
+                          <span className="truncate leading-tight font-medium">
+                            {name}
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-1.5 shrink-0">
-                          {chapter.badge && !isActive && (
-                            <span className="hidden sm:inline rounded bg-slate-100 dark:bg-slate-800 px-1.5 py-0.5 text-[8px] font-mono text-slate-500">
-                              {chapter.badge}
-                            </span>
-                          )}
+                        <div className="flex items-center gap-1 shrink-0 ml-1">
                           <span
                             className={`text-[9px] font-mono flex items-center gap-0.5 ${
                               isActive ? 'text-emerald-100' : 'text-slate-400'
