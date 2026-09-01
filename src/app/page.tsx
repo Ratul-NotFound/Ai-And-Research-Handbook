@@ -8,6 +8,7 @@ import Footer from '@/components/layout/Footer';
 import CommandPalette from '@/components/search/CommandPalette';
 import AuthenticBook, { AuthenticBookProps } from '@/components/home/AuthenticBook';
 import TextStrokeReveal from '@/components/home/TextStrokeReveal';
+import HeroFluidField from '@/components/home/HeroFluidField';
 import { 
   Bot, 
   Sigma, 
@@ -239,21 +240,24 @@ export default function HomePage() {
 
       <CommandPalette isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
 
-      {/* Main Container */}
-      <main suppressHydrationWarning className="mx-auto flex-1 w-full max-w-7xl px-4 sm:px-6 lg:px-8 space-y-16">
+      {/* MAIN CONTENT WRAPPER */}
+      <main suppressHydrationWarning className="flex-1 w-full space-y-16">
         
-        {/* FULL-PAGE RESPONSIVE HERO SECTION */}
+        {/* FULL-BLEED FULL-PAGE HERO SECTION (Edge-to-Edge Fluid Wave Manifold) */}
         <section 
           suppressHydrationWarning 
-          className="min-h-[calc(100dvh-5rem)] flex flex-col items-center justify-between text-center max-w-4xl mx-auto py-8 sm:py-12"
+          className="relative w-full min-h-[calc(100dvh-4.5rem)] flex flex-col items-center justify-between text-center py-8 sm:py-12 overflow-hidden"
         >
-          <div className="w-full flex-1 flex flex-col items-center justify-center space-y-6">
+          {/* 60fps GPU Mathematical Fluid Wave Manifold Field */}
+          <HeroFluidField />
+
+          <div className="relative z-10 w-full max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 flex-1 flex flex-col items-center justify-center space-y-6">
             {/* Main Hero Headline with Synchronized Stroke-Draw Then Fill-Reveal Animation */}
             <TextStrokeReveal />
 
-            {/* Clean 1-Line Slogan (Pure Solid Color, No Gradients) */}
-            <p className="text-sm sm:text-base md:text-lg font-medium text-slate-700 dark:text-slate-300 tracking-tight max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500 delay-300">
-              From Mathematical Foundations to Autonomous Agent Swarms • 6 Volumes • 89 Chapters
+            {/* Clean Short Slogan */}
+            <p className="text-sm sm:text-base md:text-lg font-medium text-slate-600 dark:text-slate-400 tracking-tight max-w-xl mx-auto animate-in fade-in slide-in-from-bottom-2 duration-500 delay-300">
+              From Mathematics to Autonomous Agents • 6 Volumes
             </p>
 
             {/* Minimal Action CTAs */}
@@ -279,15 +283,16 @@ export default function HomePage() {
           {/* Scroll Down Prompt at the Bottom of First Viewport */}
           <a
             href="#curriculum"
-            className="pt-4 inline-flex flex-col items-center gap-1 text-xs font-mono font-semibold text-slate-400 dark:text-slate-500 hover:text-slate-900 dark:hover:text-white transition-colors group cursor-pointer"
+            className="relative z-10 pb-2 inline-flex flex-col items-center gap-1.5 text-xs font-mono font-medium text-slate-500 dark:text-slate-400 hover:text-slate-950 dark:hover:text-white transition-colors group cursor-pointer"
           >
             <span>Explore 6 Textbook Volumes</span>
-            <ChevronDown className="h-4 w-4 animate-bounce group-hover:translate-y-1 transition-transform" />
+            <ChevronDown className="h-4 w-4 animate-bounce group-hover:translate-y-1 transition-transform text-slate-400 dark:text-slate-500" />
           </a>
         </section>
 
         {/* 6 HARDBOUND BOOKS (Digital Shelf Grid with Filter Tabs) */}
-        <section id="curriculum" suppressHydrationWarning className="space-y-6 pt-4">
+        <div className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
+          <section id="curriculum" suppressHydrationWarning className="space-y-6 pt-4">
           
           {/* Header & Filter Controls */}
           <div suppressHydrationWarning className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-3">
@@ -336,6 +341,7 @@ export default function HomePage() {
             ))}
           </div>
         </section>
+        </div>
 
       </main>
 
