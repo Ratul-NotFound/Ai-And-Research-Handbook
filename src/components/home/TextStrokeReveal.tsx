@@ -1,12 +1,18 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 export default function TextStrokeReveal() {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   return (
-    <div className="relative w-full flex flex-col items-center justify-center select-none py-2">
-      <style jsx>{`
-        @keyframes strokeDrawLeft {
+    <div suppressHydrationWarning className="relative w-full flex flex-col items-center justify-center select-none py-2">
+      <style>{`
+        @keyframes svgStrokeDrawLeft {
           0% {
             stroke-dasharray: 2000;
             stroke-dashoffset: 2000;
@@ -22,7 +28,7 @@ export default function TextStrokeReveal() {
           }
         }
 
-        @keyframes fillWipeLeftToRight {
+        @keyframes svgFillWipeLeft {
           0% {
             width: 0px;
             opacity: 0;
@@ -39,29 +45,30 @@ export default function TextStrokeReveal() {
         .svg-stroke-line-1 {
           stroke-dasharray: 2000;
           stroke-dashoffset: 2000;
-          animation: strokeDrawLeft 1.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
+          animation: svgStrokeDrawLeft 1.8s cubic-bezier(0.25, 1, 0.5, 1) forwards;
         }
 
         .svg-stroke-line-2 {
           stroke-dasharray: 2000;
           stroke-dashoffset: 2000;
-          animation: strokeDrawLeft 1.8s cubic-bezier(0.25, 1, 0.5, 1) 0.3s forwards;
+          animation: svgStrokeDrawLeft 1.8s cubic-bezier(0.25, 1, 0.5, 1) 0.3s forwards;
         }
 
         .svg-clip-wipe {
           width: 0px;
-          animation: fillWipeLeftToRight 2.2s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
+          animation: svgFillWipeLeft 2.2s cubic-bezier(0.16, 1, 0.3, 1) 1.2s forwards;
         }
       `}</style>
 
-      {/* BIGGER SVG STROKE-DRAWING ANIMATION + LEFT-TO-RIGHT COMPLETE FILL REVEAL */}
-      <div className="w-full max-w-6xl mx-auto flex justify-center overflow-visible px-2">
+      {/* SVG STROKE-DRAWING ANIMATION + LEFT-TO-RIGHT COMPLETE FILL REVEAL */}
+      <div suppressHydrationWarning className="w-full max-w-6xl mx-auto flex justify-center overflow-visible px-2">
         <svg
           viewBox="0 0 1600 270"
           className="w-full h-auto max-h-[220px] sm:max-h-[300px] lg:max-h-[350px] overflow-visible select-none"
           preserveAspectRatio="xMidYMid meet"
           aria-label="First-Principles Artificial Intelligence & Research Handbook"
           role="img"
+          suppressHydrationWarning
         >
           <defs>
             {/* WIDE CLIP PATH EXPANDING FROM LEFT TO RIGHT OVER ENTIRE 1600PX VIEWBOX */}
@@ -70,12 +77,13 @@ export default function TextStrokeReveal() {
                 x="0"
                 y="0"
                 height="270"
-                className="svg-clip-wipe"
+                className={mounted ? "svg-clip-wipe" : ""}
+                style={{ width: mounted ? undefined : '0px' }}
               />
             </clipPath>
           </defs>
 
-          {/* 1. FIRST: SVG BORDER STROKE PATH DRAWING (BIGGER 80PX FONT) */}
+          {/* 1. FIRST: SVG BORDER STROKE PATH DRAWING */}
           <text
             x="800"
             y="105"
@@ -85,7 +93,7 @@ export default function TextStrokeReveal() {
             strokeWidth="3.2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="svg-stroke-line-1 font-black tracking-tight text-slate-950 dark:text-white"
+            className={`${mounted ? 'svg-stroke-line-1' : ''} font-black tracking-tight text-slate-950 dark:text-white`}
             style={{
               fontSize: '80px',
               fontWeight: 900,
@@ -105,7 +113,7 @@ export default function TextStrokeReveal() {
             strokeWidth="3.2"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className="svg-stroke-line-2 font-black tracking-tight text-slate-950 dark:text-white"
+            className={`${mounted ? 'svg-stroke-line-2' : ''} font-black tracking-tight text-slate-950 dark:text-white`}
             style={{
               fontSize: '80px',
               fontWeight: 900,

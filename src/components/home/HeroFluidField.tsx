@@ -160,10 +160,11 @@ export default function HeroFluidField() {
   }, []);
 
   return (
-    <div className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden select-none z-0">
+    <div suppressHydrationWarning className="absolute inset-0 w-full h-full pointer-events-none overflow-hidden select-none z-0">
       {/* 60fps GPU Mathematical Fluid Wave Manifold Canvas */}
       <canvas 
         ref={canvasRef} 
+        suppressHydrationWarning
         className="absolute inset-0 w-full h-full block" 
       />
 
